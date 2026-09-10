@@ -1,0 +1,25 @@
+<section class="updates">
+    <header class="updates__head">
+        <h2>Build updates</h2>
+        <span class="updates__count">// {{ project.updates.count }} update{{ project.updates.count|pluralize }}</span>
+    </header>
+
+    {% if project.updates.all %}
+        <div class="updates__list">
+            {% for update in project.updates.all %}
+                <article class="update">
+                    <header class="update__head">
+                        <h3>{{ update.title }}</h3>
+                        <span class="update-badge" data-type="{{ update.type }}">{{ update.get_type_display }}</span>
+                    </header>
+                    <div class="update__body">{{ update.body|linebreaks }}</div>
+                    <footer class="update__meta">{{ update.created|date:"M j, Y · H:i" }}</footer>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="updates__empty">
+            <p>Nothing logged yet.</p>
+        </div>
+    {% endif %}
+</section>

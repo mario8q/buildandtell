@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}Projects · Build&Tell{% endblock title %}
 
@@ -17,11 +18,12 @@
                     <article class="card">
                         {% if project.image %}
                             <a class="card__media" href="{{ project.get_absolute_url }}">
-                                <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                                <img src="{% thumbnail project.image 640x360 crop='smart' quality=90 %}" alt="{{ project.title }}">
                             </a>
                         {% else %}
                             <a class="card__media" href="{{ project.get_absolute_url }}">
-                                <img src="{% static 'projects/img/'|add:project.default_image|add:'.svg' %}" alt="{{ project.title }}">
+                                <img src="{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}"
+                                    alt="{{ project.title }}">
                             </a>
                         {% endif %}
                         <div class="card__top">

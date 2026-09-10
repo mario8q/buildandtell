@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ project.title }} · Build&Tell{% endblock title %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb">
+            <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+        </nav>
+
+        <header class="project-hero">
+            <div class="project-hero__top">
+                <h1>{{ project.title }}</h1>
+                <span class="badge" data-status="{{ project.status }}">{{ project.get_status_display }}</span>
+            </div>
+            {% if project.description %}
+                <div class="project-hero__desc">{{ project.description|linebreaks }}</div>
+            {% endif %}
+        </header>
+
+        <div class="detail-layout">
+            <main class="detail-main">
+                {% block buildupdates %}
+                    {% include 'project/partials/buildupdates.html' %}
+                {% endblock buildupdates %}
+            </main>
+
+            <aside class="detail-side">
+                <div class="panel">
+                    {% if project.image %}
+                        <div class="panel__media">
+                            <img src="{% thumbnail project.image 380x240 crop='smart' quality=90 %}" alt="{{ project.title }}">
+                        </div>
+                    {% else %}
+                        <div class="panel__media panel__media--placeholder">
+                            <img src="{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}" alt="{{ project.title }}">
+                        </div>
+                    {% endif %}
+                    <div class="panel__bar">
+                        <span class="panel__dot"></span>
+                        <span class="panel__dot"></span>
+                        <span class="panel__dot"></span>
+                        <span class="panel__title">${"project"}:metadata</span>
+                    </div>
+                    <dl class="meta-list">
+                        <div class="meta-row">
+                            <dt>author</dt>
+                            <dd>{{ project.user.username }}</dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>status</dt>
+                            <dd>{{ project.get_status_display }}</dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>created</dt>
+                            <dd><time datetime="{{ project.created|date:'c' }}">{{ project.created|date:"M j, Y" }}</time></dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>updated</dt>
+                            <dd><time datetime="{{ project.updated|date:'c' }}">{{ project.updated|date:"M j, Y" }}</time></dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>repo</dt>
+                            <dd>
+                                {% if project.repo_url %}
+                                    <a href="{{ project.repo_url }}" target="_blank" rel="noopener">{{ project.repo_url|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
+                                {% else %}
+                                    <span class="meta-row__na">—</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>site</dt>
+                            <dd>
+                                {% if project.website_url %}
+                                    <a href="{{ project.website_url }}" target="_blank" rel="noopener">{{ project.website_url|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
+                                {% else %}
+                                    <span class="meta-row__na">—</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
+                    {% if project.repo_url or project.website_url %}
+                        <div class="panel__actions">
+                            {% if project.repo_url %}
+                                <a class="btn" href="{{ project.repo_url }}" target="_blank" rel="noopener">view repo &nearr;</a>
+                            {% endif %}
+                            {% if project.website_url %}
+                                <a class="btn btn--ghost" href="{{ project.website_url }}" target="_blank" rel="noopener">visit site &nearr;</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock content %}

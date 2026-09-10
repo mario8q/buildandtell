@@ -37,3 +37,6 @@ def project_create(request):
             'project/create.html',
             {'form': project_form}
         )
+
+def build_update_create(request):
+    pass
