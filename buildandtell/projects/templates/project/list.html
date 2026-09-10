@@ -1,13 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects · Build&Tell{% endblock title %}
 
 {% block content %}
-    <h1>Projects</h1>
-    {% for project in projects %}
-        <div>
-            <title>{{ project.title }}</title>
-            <p>by {{ project.user.username }}</p>
-            <p>{{ project.description|linebreaks }}</p>
-        </div>
-    {% endfor %}
+    <div class="container page">
+        <header class="page-head">
+            <h1>Projects</h1>
+            <p class="page-head__sub">Track and document your builds as you go — overview, updates, and everything in between.</p>
+            <div class="page-head__rule"><span>&gt;</span>{{ projects|length }} project{{ projects|length|pluralize }}</div>
+        </header>
+
+        {% if projects %}
+            <section class="grid">
+                {% for project in projects %}
+                    <article class="card">
+                        {% if project.image %}
+                            <a class="card__media" href="{{ project.get_absolute_url }}">
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                            </a>
+                        {% else %}
+                            <a class="card__media" href="{{ project.get_absolute_url }}">
+                                <img src="{% static 'projects/img/'|add:project.default_image|add:'.svg' %}" alt="{{ project.title }}">
+                            </a>
+                        {% endif %}
+                        <div class="card__top">
+                            <h2 class="card__title"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h2>
+                            <span class="badge" data-status="{{ project.status }}">{{ project.get_status_display }}</span>
+                        </div>
+                        <div class="card__desc">{{ project.description|linebreaks|truncatewords:30 }}</div>
+                        <footer class="card__meta">
+                            <span>by {{ project.user.username }}</span>
+                            <span>Updated {{ project.updated|date:"M j, Y" }}</span>
+                        </footer>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <section class="grid">
+                <div class="empty">
+                    <p>No projects yet.</p>
+                </div>
+            </section>
+        {% endif %}
+    </div>
 {% endblock content %}
-    

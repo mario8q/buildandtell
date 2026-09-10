@@ -1,12 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Build&Tell</title>
+    <meta name="description" content="Build&Tell — document your projects as you build them.">
+    <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}">
+    <title>{% block title %}Build&Tell{% endblock title %}</title>
+    {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
-    {% block content %}  
-    {% endblock content %}
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="brand" href="/projects/">
+                <span class="brand__mark">B&amp;T</span>
+                Build<span class="brand__slash">&amp;</span>Tell
+            </a>
+            <nav class="site-nav">
+                <a class="site-nav__link" href="/projects/">Projects</a>
+                <a class="site-nav__link" href="/admin/">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container site-footer__inner">
+            <span>Build&Tell</span>
+            <span>Document what you build.</span>
+        </div>
+    </footer>
 </body>
 </html>
