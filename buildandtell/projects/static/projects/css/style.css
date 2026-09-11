@@ -767,6 +767,211 @@ a:hover {
   font-size: 0.82rem;
 }
 
+/* Flash messages */
+.flashes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+.flash {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.flash::before {
+  content: ">";
+  font-weight: 700;
+}
+
+.flash--success {
+  color: var(--green);
+  border-color: rgba(74, 222, 128, 0.35);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.flash--error {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+/* Create pages */
+.create {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.create__head {
+  margin-bottom: 24px;
+}
+
+.create__title {
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.create__fn {
+  color: var(--accent-strong);
+}
+
+.create__callee {
+  color: var(--text-faint);
+}
+
+.create__arg {
+  color: var(--green);
+}
+
+.create__sub {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.text-link {
+  color: var(--accent-strong);
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 26px 24px;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form__field label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+}
+
+.form__field label::after {
+  content: ":";
+  color: var(--text-faint);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 140, 255, 0.15);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.6;
+}
+
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237c8cff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+input.input--file {
+  padding: 9px 12px;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+input.input--file::-webkit-file-upload-button {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-strong);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+input.input--file::-webkit-file-upload-button:hover {
+  border-color: var(--accent);
+}
+
+.form__hint {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+.form__field-errors .errorlist,
+.form__errors .errorlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.form__field-errors .errorlist li,
+.form__errors .errorlist li {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #f87171;
+  padding: 4px 8px;
+  border-left: 2px solid #f87171;
+  background: rgba(248, 113, 113, 0.06);
+  border-radius: 0 6px 6px 0;
+}
+
+.form__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.form__actions .btn {
+  flex: 1;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .detail-layout {
@@ -801,6 +1006,14 @@ a:hover {
 
   .project-hero h1 {
     font-size: 1.6rem;
+  }
+
+  .create__title {
+    font-size: 1.05rem;
+  }
+
+  .form {
+    padding: 20px 16px 18px;
   }
 
   .updates__head {

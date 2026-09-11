@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}new project · Build&Tell{% endblock title %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb">
+            <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+        </nav>
+
+        <div class="create">
+            <header class="create__head">
+                <h1 class="create__title">
+                    <span class="create__fn">project</span><span class="create__callee">.create()</span>
+                </h1>
+                <p class="create__sub">Spin up a new project and start logging every build.</p>
+            </header>
+
+            <form class="form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form__errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form__field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="form__field-errors">{{ field.errors }}</div>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="form__hint">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="form__actions">
+                    <button type="submit" class="btn">create project &nearr;</button>
+                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

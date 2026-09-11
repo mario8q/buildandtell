@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=4">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
@@ -25,6 +25,13 @@
     </header>
 
     <main>
+        {% if messages %}
+            <div class="container flashes">
+                {% for message in messages %}
+                    <div class="flash flash--{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% block content %}
         {% endblock content %}
     </main>
