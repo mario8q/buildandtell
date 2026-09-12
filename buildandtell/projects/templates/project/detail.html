@@ -29,7 +29,7 @@
 
             <aside class="detail-side">
                 <div class="panel">
-                    {% if project.image %}
+                    <!-- {% if project.image %}
                         <div class="panel__media">
                             <img src="{% thumbnail project.image 380x240 crop='smart' quality=90 %}" alt="{{ project.title }}">
                         </div>
@@ -37,7 +37,10 @@
                         <div class="panel__media panel__media--placeholder">
                             <img src="{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}" alt="{{ project.title }}">
                         </div>
-                    {% endif %}
+                    {% endif %} -->
+                    <div class="panel__media">
+                        <img src="{% if project.image %}{% thumbnail project.image 380x240 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
+                    </div>
                     <div class="panel__bar">
                         <span class="panel__dot"></span>
                         <span class="panel__dot"></span>

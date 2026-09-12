@@ -1,4 +1,5 @@
 {% load static %}
+{% load thumbnail %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=7">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
@@ -20,6 +21,25 @@
             <nav class="site-nav">
                 <a class="site-nav__link" href="/projects/">Projects</a>
                 <a class="site-nav__link" href="/admin/">Admin</a>
+                {% if request.user.is_authenticated %}
+                    <span class="site-nav__divider" aria-hidden="true"></span>
+                    <a class="user-chip" href="{% url 'account:edit_profile' %}" title="Edit profile">
+                        {% if request.user.profile.image %}
+                            <img class="user-chip__avatar"
+                                 src="{% thumbnail request.user.profile.image 32x32 crop='smart' quality=90 %}"
+                                 alt="">
+                        {% else %}
+                            <span class="user-chip__avatar user-chip__avatar--fallback">{{ request.user.username|slice:":1"|upper }}</span>
+                        {% endif %}
+                        <span class="user-chip__name">{{ request.user.username }}</span>
+                    </a>
+                    <form class="logout-form" method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-form__btn" title="Log out">logout()</button>
+                    </form>
+                {% else %}
+                    <a class="site-nav__link site-nav__link--login" href="{% url 'login' %}">login</a>
+                {% endif %}
             </nav>
         </div>
     </header>

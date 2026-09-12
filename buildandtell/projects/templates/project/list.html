@@ -16,7 +16,7 @@
             <section class="grid">
                 {% for project in projects %}
                     <article class="card">
-                        {% if project.image %}
+                        <!-- {% if project.image %}
                             <a class="card__media" href="{{ project.get_absolute_url }}">
                                 <img src="{% thumbnail project.image 640x360 crop='smart' quality=90 %}" alt="{{ project.title }}">
                             </a>
@@ -25,7 +25,11 @@
                                 <img src="{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}"
                                     alt="{{ project.title }}">
                             </a>
-                        {% endif %}
+                        {% endif %} -->
+                        
+                        <a class="card__media" href="{{ project.get_absolute_url }}">
+                            <img src="{% if project.image %}{% thumbnail project.image 640x360 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
+                        </a>
                         <div class="card__top">
                             <h2 class="card__title"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h2>
                             <span class="badge" data-status="{{ project.status }}">{{ project.get_status_display }}</span>

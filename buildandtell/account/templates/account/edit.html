@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}edit profile · Build&Tell{% endblock title %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb">
+            <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+        </nav>
+
+        <div class="create">
+            <header class="create__head">
+                <h1 class="create__title">
+                    <span class="create__fn">user</span><span class="create__callee">.edit(</span>
+                    <span class="create__arg">profile: "{{ request.user.username }}"</span><span class="create__callee">)</span>
+                </h1>
+                <p class="create__sub">Keep your public identity up to date.</p>
+            </header>
+
+            <form class="account-grid" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if user_form.non_field_errors %}
+                    <div class="form__errors">{{ user_form.non_field_errors }}</div>
+                {% endif %}
+                {% if profile_form.non_field_errors %}
+                    <div class="form__errors">{{ profile_form.non_field_errors }}</div>
+                {% endif %}
+
+                <section class="form-pane">
+                    <div class="form-pane__bar">user</div>
+                    {% for field in user_form %}
+                        <div class="form__field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="form__field-errors">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <section class="form-pane">
+                    <div class="form-pane__bar">
+                        {% if request.user.profile.image %}
+                            <img class="form-pane__avatar"
+                                 src="{% thumbnail request.user.profile.image 96x96 crop='smart' quality=90 %}"
+                                 alt="{{ request.user.username }}">
+                        {% endif %}
+                        profile
+                    </div>
+                    {% for field in profile_form %}
+                        <div class="form__field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="form__field-errors">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <div class="form__actions account-grid__actions">
+                    <button type="submit" class="btn">save changes &nearr;</button>
+                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
