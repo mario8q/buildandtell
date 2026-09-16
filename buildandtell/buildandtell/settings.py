@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-bh=jr=8(rj4la(yh%0xb)o1x!i@a65$dy4617k+)-fzxz^%g#)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['buildandtell.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'social_django', 
     'easy_thumbnails',
     'projects.apps.ProjectsConfig'
 ]
@@ -145,6 +147,17 @@ if DEBUG:
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_SECRET')
 
+# Social auth with github
+SOCIAL_AUTH_GITHUB_KEY = config('AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = config('AUTH_GITHUB_SECRET')
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',  # Keep for username/password login
+)
+
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/projects/'
+LOGOUT_REDIRECT_URL = '/account/login/'

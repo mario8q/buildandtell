@@ -1188,6 +1188,93 @@ input.input--file::-webkit-file-upload-button:hover {
   font-size: 0.85rem;
 }
 
+.auth__divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.auth__divider::before,
+.auth__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.btn-social:active {
+  transform: translateY(1px);
+}
+
+.btn-social__glyph {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.btn-social__label {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.btn-social:hover .btn-social__label {
+  color: var(--text);
+}
+
+.btn-social--google {
+  border-color: var(--border-strong);
+}
+
+.btn-social--google:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.btn-social--google .btn-social__glyph {
+  background: #fff;
+  color: #4285f4;
+}
+
+.btn-social--github {
+  border-color: var(--border-strong);
+}
+
+.btn-social--github:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.btn-social--github .btn-social__glyph {
+  background: #1f2328;
+  color: #e9edf5;
+  border: 1px solid var(--border-strong);
+}
+
 .auth__hint {
   color: var(--text-muted);
   font-size: 0.85rem;

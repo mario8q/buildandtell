@@ -1,7 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserEditForm, ProfileEditForm
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.set_password(form.cleaned_data["password"])
+            new_user.save()
+            messages.success(request, 'profile created successfully')
+            return redirect('login')
+        else:
+            messages.error(request, 'there was an error with the form')
+    else:
+        form = UserRegistrationForm()
+    return render(
+        request,
+        'account/create.html',
+        {'form': form}
+    )
 
 @login_required
 def edit_profile(request):
