@@ -95,6 +95,11 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                    {% if user == project.user %}
+                        <div class="panel__actions">
+                            <a class="btn btn--primary" href="{% url 'projects:build_update_create' project.slug %}">log build update &nearr;</a>
+                        </div>
+                    {% endif %}
                 </div>
             </aside>
         </div>

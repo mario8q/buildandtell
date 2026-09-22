@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=8">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=11">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
@@ -39,6 +39,7 @@
                     </form>
                 {% else %}
                     <a class="site-nav__link site-nav__link--login" href="{% url 'login' %}">login</a>
+                    <a class="site-nav__btn" href="{% url 'account:register' %}">register()</a>
                 {% endif %}
             </nav>
         </div>

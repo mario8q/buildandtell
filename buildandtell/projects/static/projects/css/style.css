@@ -152,6 +152,23 @@ a:hover {
   font-family: var(--font-mono);
 }
 
+.site-nav__btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 7px 14px;
+  margin-left: 4px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  color: #0b0e14;
+  font-weight: 600;
+  transition: box-shadow 0.15s ease;
+}
+
+.site-nav__btn:hover {
+  color: #0b0e14;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
 .user-chip {
   display: inline-flex;
   align-items: center;
@@ -646,6 +663,26 @@ a:hover {
   color: var(--accent-strong);
 }
 
+.btn--danger {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.06);
+  border-color: #f87171;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.btn--danger:hover {
+  color: #fca5a5;
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.14);
+}
+
+.delete-form {
+  gap: 0;
+  padding: 14px 16px;
+  align-items: flex-start;
+}
+
 /* Build updates */
 .updates {
   margin-top: 8px;
@@ -1037,6 +1074,41 @@ input.input--file::-webkit-file-upload-button:hover {
   border-left: 2px solid #f87171;
   background: rgba(248, 113, 113, 0.06);
   border-radius: 0 6px 6px 0;
+}
+
+.form__field--current {
+  gap: 8px;
+}
+
+.form__field-current-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.form__current-image {
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+}
+
+.form__divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0 18px;
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.form__divider::before,
+.form__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 .form__actions {

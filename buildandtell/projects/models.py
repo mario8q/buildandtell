@@ -49,17 +49,17 @@ class Project(models.Model):
         ]
         ordering = ['-created']
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title) or 'project'
+            candidate, n = base, 1
+            while Project.objects.filter(slug=candidate).exists():
+                candidate, n = f"{base}-{n}", n + 1
+            self.slug = candidate
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.title} project"
-
-    def save(self, *args, **kwargs):
-            if not self.slug:
-                base = slugify(self.title) or 'project'
-                candidate, n = base, 1
-                while Project.objects.filter(slug=candidate).exists():
-                    candidate, n = f"{base}-{n}", n + 1
-                self.slug = candidate
-            super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('projects:project_detail', kwargs={'slug': self.slug})

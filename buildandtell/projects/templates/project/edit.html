@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}edit {{ project.title }} · Build&Tell{% endblock title %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb">
+            <a href="{{ project.get_absolute_url }}">&larr; {{ project.title }}</a>
+        </nav>
+
+        <div class="create">
+            <header class="create__head">
+                <h1 class="create__title">
+                    <span class="create__fn">project</span><span class="create__callee">.edit(</span>
+                    <span class="create__arg">slug: "{{ project.slug }}"</span><span class="create__callee">)</span>
+                </h1>
+                <p class="create__sub">Keep the project details up to date.</p>
+            </header>
+
+            <form class="form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form__errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form__field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="form__field-errors">{{ field.errors }}</div>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="form__hint">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                {% if project.image %}
+                    <div class="form__field form__field--current">
+                        <span class="form__field-current-label">// current image</span>
+                        <img class="form__current-image"
+                             src="{% thumbnail project.image 640x360 crop='smart' quality=90 %}"
+                             alt="{{ project.title }}">
+                    </div>
+                {% endif %}
+
+                <div class="form__actions">
+                    <button type="submit" class="btn">save changes &nearr;</button>
+                    <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">cancel</a>
+                </div>
+            </form>
+
+            <div class="form__divider">danger zone</div>
+
+            <form class="form delete-form" method="post" action="{% url 'projects:project_delete' project.slug %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn--danger">project.delete()</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

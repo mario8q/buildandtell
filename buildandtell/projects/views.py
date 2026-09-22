@@ -41,6 +41,32 @@ def project_create(request):
     )
 
 @login_required
+def project_edit(request, slug):
+    project = get_object_or_404(Project, slug=slug, user=request.user)
+    if request.method == 'POST':
+        project_form = CreateProjectForm(request.POST, request.FILES,instance=project)
+        if project_form.is_valid():
+            project_form.save()
+            messages.success(request,'Project updated successfully')
+            return redirect(project.get_absolute_url())
+        else:
+            messages.error(request, 'there was an error with the form')
+    else:
+        project_form = CreateProjectForm(instance=project)
+    return render(
+        request,
+        'project/edit.html',
+        {'form': project_form,'project': project}
+    )
+
+@login_required
+def project_delete(request, slug):
+    project = get_object_or_404(Project, slug=slug, user=request.user)
+    project.delete()
+    messages.success(request, 'project deleted successfully')
+    return redirect('projects:project_list')
+
+@login_required
 def build_update_create(request, slug):
     project = get_object_or_404(Project, slug=slug, user=request.user)
     if request.method == 'POST':
@@ -60,3 +86,30 @@ def build_update_create(request, slug):
         'build_update/create.html',
         {'form': build_update_form, 'project': project}
     )
+
+@login_required
+def build_update_edit(request, slug):
+    project = get_object_or_404(Project, slug=slug, user=request.user)
+    build_update = get_object_or_404(BuildUpdate, project=project)
+    if request.method == 'POST':
+        build_update_form = CreateBuildUpdateForm(request.POST, instance=build_update)
+        if build_update_form.is_valid():
+            build_update_form.save()
+            messages.success(request, 'build update updated succsessfully')
+        else:
+            messages.error(request, 'there was an error with the form')
+    else:
+        build_update_form = CreateBuildUpdateForm(instance=build_update)
+    return render(
+        request,
+        'build_update/edit.html',
+        {'form': build_update_form, 'project': project}
+    )
+
+@login_required
+def build_update_delete(request, slug):
+    project = get_object_or_404(Project, slug=slug, user=request.user)
+    build_update = get_object_or_404(BuildUpdate, project=project)
+    build_update.delete()
+    messages.success(request, 'build update deleted succsessfully')
+    return redirect(project.get_absolute_url())
