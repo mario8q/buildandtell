@@ -1,23 +1,48 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
+.eggs/
+build/
+dist/
+
+# Test / lint / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+.coverage.*
+pip-wheel-metadata/
 
 # Virtual environment
 venv/
+.venv/
 
-# Django
+# Django / app runtime
 buildandtell/db.sqlite3
 *.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
 media/
 staticfiles/
 *.log
 
+# TLS certs / keys (dev)
+*.crt
+*.key
+*.pem
+*.p12
+
 # Secrets / local config
 .env
+.env.*
 
 # Editor / OS
 .idea/
 .vscode/
 Thumbs.db
 .DS_Store
+
+buildandtell/.opencode

@@ -2,13 +2,13 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %}Projects · Build&Tell{% endblock title %}
+{% block title %}My projects · Build&Tell{% endblock title %}
 
 {% block content %}
     <div class="container page">
         <header class="page-head">
-            <h1 class="page-head__title">Projects</h1>
-            <p class="page-head__sub">Track and document your builds as you go — overview, updates, and everything in between.</p>
+            <h1 class="page-head__title">My projects</h1>
+            <p class="page-head__sub">Here is what you have built {{ username }}</p>
             <p class="page-head__meta">{{ projects|length }} project{{ projects|length|pluralize }}</p>
         </header>
 
@@ -16,12 +16,12 @@
             <section class="grid" aria-label="Projects">
                 {% for project in projects %}
                     <article class="card">
-                        <a class="card__media" href="{{ project.get_absolute_url }}?source=all-projects">
+                        <a class="card__media" href="{{ project.get_absolute_url }}?source=user-projects">
                             <img src="{% if project.image %}{% thumbnail project.image 640x360 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
                         </a>
                         <div class="card__body">
                             <div class="card__top">
-                                <h2 class="card__title"><a href="{{ project.get_absolute_url }}?source=all-projects">{{ project.title }}</a></h2>
+                                <h2 class="card__title"><a href="{{ project.get_absolute_url }}?source=user-projects">{{ project.title }}</a></h2>
                                 <span class="badge badge--{{ project.status }}">{{ project.get_status_display }}</span>
                             </div>
                             <div class="card__desc">{{ project.description|linebreaks|truncatewords:30 }}</div>
@@ -32,7 +32,7 @@
                         </footer>
                     </article>
                 {% empty %}
-                    There are no projects yet.
+                    There are no personal projects yet.
                 {% endfor %}
             </section>
         {% else %}

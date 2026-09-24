@@ -5,11 +5,22 @@ from .models import Project, BuildUpdate
 from .forms import CreateBuildUpdateForm, CreateProjectForm
 
 def project_list(request):
-    projects = Project.objects.exclude(status=Project.Status.ARCHIVED)
+    if request.user.is_authenticated:
+        projects = Project.objects.exclude(user=request.user, status=Project.Status.ARCHIVED)
+    else:
+        projects = Project.objects.all()
     return render(
         request,
         'project/list.html',
         {'projects': projects}
+    )
+
+def project_user_list(request, username):
+    projects = Project.objects.filter(user=request.user)
+    return render(
+        request,
+        'project/user_list.html',
+        {'projects': projects, 'username': username}
     )
 
 def project_detail(request, slug):
@@ -88,9 +99,9 @@ def build_update_create(request, slug):
     )
 
 @login_required
-def build_update_edit(request, slug):
+def build_update_edit(request, slug, id):
     project = get_object_or_404(Project, slug=slug, user=request.user)
-    build_update = get_object_or_404(BuildUpdate, project=project)
+    build_update = get_object_or_404(BuildUpdate, project=project, id=id)
     if request.method == 'POST':
         build_update_form = CreateBuildUpdateForm(request.POST, instance=build_update)
         if build_update_form.is_valid():

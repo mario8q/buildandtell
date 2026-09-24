@@ -1,20 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}edit build update · Build&Tell{% endblock title %}
+{% block title %}Edit build update · Build&Tell{% endblock title %}
 
 {% block content %}
     <div class="container page">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="{{ project.get_absolute_url }}">&larr; {{ project.title }}</a>
         </nav>
 
         <div class="create">
             <header class="create__head">
-                <h1 class="create__title">
-                    <span class="create__fn">build_update</span><span class="create__callee">.edit(</span>
-                    <span class="create__arg">project: "{{ project.title }}"</span><span class="create__callee">)</span>
-                </h1>
+                <h1 class="create__title">Edit build update</h1>
                 <p class="create__sub">Edit this build update for
                     <a class="text-link" href="{{ project.get_absolute_url }}">{{ project.title }}</a>.
                 </p>
@@ -28,7 +25,7 @@
 
                 {% for field in form %}
                     <div class="form__field">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label class="form__field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.errors %}
                             <div class="form__field-errors">{{ field.errors }}</div>
@@ -40,16 +37,16 @@
                 {% endfor %}
 
                 <div class="form__actions">
-                    <button type="submit" class="btn">save changes &nearr;</button>
-                    <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">cancel</a>
+                    <button type="submit" class="btn btn--primary">Save changes</button>
+                    <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">Cancel</a>
                 </div>
             </form>
 
-            <div class="form__divider">danger zone</div>
+            <div class="form__divider">Danger zone</div>
 
             <form class="form delete-form" method="post" action="{% url 'projects:build_update_delete' project.slug %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn--danger">build_update.delete()</button>
+                <button type="submit" class="btn btn--danger">Delete this update</button>
             </form>
         </div>
     </div>

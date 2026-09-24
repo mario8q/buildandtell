@@ -10,6 +10,6 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(BuildUpdate)
 class BuildUpdateAdmin(admin.ModelAdmin):
-    list_display = ['project', 'title', 'type', 'body', 'created', 'updated']
+    list_display = ['id', 'project', 'title', 'type', 'body', 'created', 'updated']
     list_filter = ['created']
     search_fields = ['title', 'body']

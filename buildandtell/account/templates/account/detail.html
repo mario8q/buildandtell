@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ user.get_full_name|default:user.username }} · Build&Tell{% endblock title %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+        </nav>
+
+        <header class="profile-hero">
+            <div class="profile-hero__identity">
+                {% if profile.image %}
+                    <img class="profile-hero__avatar"
+                         src="{% thumbnail profile.image 160x160 crop='smart' quality=90 %}"
+                         alt="{{ user.username }}">
+                {% else %}
+                    <span class="profile-hero__avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+                {% endif %}
+                <div class="profile-hero__who">
+                    <h1 class="profile-hero__name">{{ user.get_full_name|default:user.username }}</h1>
+                    <span class="profile-hero__username">@{{ user.username }}</span>
+                    {% if profile.bio %}
+                        <div class="profile-hero__bio">{{ profile.bio|linebreaks }}</div>
+                    {% endif %}
+                    <div class="profile-hero__meta">
+                        <span>Member since <time datetime="{{ user.date_joined|date:'c' }}">{{ user.date_joined|date:"M j, Y" }}</time></span>
+                        {% if user.last_login %}
+                            <span>Last active <time datetime="{{ user.last_login|date:'c' }}">{{ user.last_login|date:"M j, Y" }}</time></span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="profile-hero__actions">
+                {% if request.user == user %}
+                    <a class="btn btn--primary" href="{% url 'account:edit_profile' %}">Edit profile</a>
+                {% endif %}
+                {% if profile.website %}
+                    <a class="btn btn--ghost" href="{{ profile.website }}" target="_blank" rel="noopener">Website</a>
+                {% endif %}
+                {% if profile.github %}
+                    <a class="btn btn--ghost" href="{{ profile.github }}" target="_blank" rel="noopener">GitHub</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <section class="stats" aria-label="Profile stats">
+            <div class="stat">
+                <span class="stat__value">{{ projects|length }}</span>
+                <span class="stat__label">Project{{ projects|length|pluralize }}</span>
+            </div>
+            <div class="stat">
+                <span class="stat__value">{{ status_totals.IN|default:0 }}</span>
+                <span class="stat__label">In progress</span>
+            </div>
+            <div class="stat">
+                <span class="stat__value">{{ status_totals.CO|default:0 }}</span>
+                <span class="stat__label">Completed</span>
+            </div>
+            <div class="stat">
+                <span class="stat__value">{{ update_count }}</span>
+                <span class="stat__label">Build update{{ update_count|pluralize }}</span>
+            </div>
+        </section>
+
+        <div class="detail-layout">
+            <main class="detail-main">
+                <section class="section" aria-label="Projects">
+                    <header class="section__head">
+                        <h2>Projects</h2>
+                        <span class="section__count">{{ projects|length }} project{{ projects|length|pluralize }}</span>
+                    </header>
+
+                    {% if projects %}
+                        <div class="grid">
+                            {% for project in projects %}
+                                <article class="card">
+                                    <a class="card__media" href="{{ project.get_absolute_url }}">
+                                        <img src="{% if project.image %}{% thumbnail project.image 640x360 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
+                                    </a>
+                                    <div class="card__body">
+                                        <div class="card__top">
+                                            <h3 class="card__title"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+                                            <span class="badge badge--{{ project.status }}">{{ project.get_status_display }}</span>
+                                        </div>
+                                        <div class="card__desc">{{ project.description|linebreaks|truncatewords:28 }}</div>
+                                    </div>
+                                    <footer class="card__meta">
+                                        <span>{{ project.updates.count }} update{{ project.updates.count|pluralize }}</span>
+                                        <time datetime="{{ project.updated|date:'c' }}">Updated {{ project.updated|date:"M j, Y" }}</time>
+                                    </footer>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty">
+                            <p>No projects yet.</p>
+                        </div>
+                    {% endif %}
+                </section>
+            </main>
+
+            <aside class="detail-side">
+                <div class="meta-card">
+                    <div class="meta-card__head">
+                        <h3>Details</h3>
+                    </div>
+                    <dl class="meta-list">
+                        <div class="meta-row">
+                            <dt class="meta-row__label">Display name</dt>
+                            <dd class="meta-row__value">{{ user.get_full_name|default:'—' }}</dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt class="meta-row__label">Username</dt>
+                            <dd class="meta-row__value">@{{ user.username }}</dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt class="meta-row__label">Member since</dt>
+                            <dd class="meta-row__value"><time datetime="{{ user.date_joined|date:'c' }}">{{ user.date_joined|date:"M j, Y" }}</time></dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt class="meta-row__label">Last seen</dt>
+                            <dd class="meta-row__value">
+                                {% if user.last_login %}<time datetime="{{ user.last_login|date:'c' }}">{{ user.last_login|date:"M j, Y" }}</time>{% else %}<span class="meta-row__na">—</span>{% endif %}
+                            </dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt class="meta-row__label">Website</dt>
+                            <dd class="meta-row__value">
+                                {% if profile.website %}
+                                    <a href="{{ profile.website }}" target="_blank" rel="noopener">{{ profile.website|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
+                                {% else %}
+                                    <span class="meta-row__na">—</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt class="meta-row__label">GitHub</dt>
+                            <dd class="meta-row__value">
+                                {% if profile.github %}
+                                    <a href="{{ profile.github }}" target="_blank" rel="noopener">{{ profile.github|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
+                                {% else %}
+                                    <span class="meta-row__na">—</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
+                    {% if request.user == user %}
+                        <div class="meta-card__actions">
+                            <a class="btn btn--primary" href="{% url 'account:edit_profile' %}">Edit profile</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </aside>
+        </div>
+
+        <section class="section" aria-label="Recent activity">
+            <header class="section__head">
+                <h2>Recent activity</h2>
+                <span class="section__count">{{ update_count }} update{{ update_count|pluralize }} in total</span>
+            </header>
+
+            {% if recent_updates %}
+                <ol class="timeline">
+                    {% for update in recent_updates %}
+                        <li class="timeline__item">
+                            <article class="update">
+                                <header class="update__head">
+                                    <div class="update__title">
+                                        <h3>{{ update.title }}</h3>
+                                        <span class="update__project">in <a href="{{ update.project.get_absolute_url }}">{{ update.project.title }}</a></span>
+                                    </div>
+                                    <span class="badge badge--type">{{ update.get_type_display }}</span>
+                                </header>
+                                <div class="update__body">{{ update.body|linebreaks|truncatewords_html:70 }}</div>
+                                <footer class="update__meta">
+                                    <time datetime="{{ update.created|date:'c' }}">{{ update.created|date:"M j, Y · H:i" }}</time>
+                                </footer>
+                            </article>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <div class="updates__empty">
+                    <p>Nothing logged yet.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+{% endblock content %}

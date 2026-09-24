@@ -2,20 +2,17 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %}edit profile · Build&Tell{% endblock title %}
+{% block title %}Edit profile · Build&Tell{% endblock title %}
 
 {% block content %}
     <div class="container page">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
         </nav>
 
         <div class="create">
             <header class="create__head">
-                <h1 class="create__title">
-                    <span class="create__fn">user</span><span class="create__callee">.edit(</span>
-                    <span class="create__arg">profile: "{{ request.user.username }}"</span><span class="create__callee">)</span>
-                </h1>
+                <h1 class="create__title">Edit profile</h1>
                 <p class="create__sub">Keep your public identity up to date.</p>
             </header>
 
@@ -29,10 +26,12 @@
                 {% endif %}
 
                 <section class="form-pane">
-                    <div class="form-pane__bar">user</div>
+                    <header class="form-pane__head">
+                        <h2 class="form-pane__title">Account</h2>
+                    </header>
                     {% for field in user_form %}
                         <div class="form__field">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <label class="form__field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                             {{ field }}
                             {% if field.errors %}
                                 <div class="form__field-errors">{{ field.errors }}</div>
@@ -42,17 +41,17 @@
                 </section>
 
                 <section class="form-pane">
-                    <div class="form-pane__bar">
+                    <header class="form-pane__head">
                         {% if request.user.profile.image %}
                             <img class="form-pane__avatar"
                                  src="{% thumbnail request.user.profile.image 96x96 crop='smart' quality=90 %}"
                                  alt="{{ request.user.username }}">
                         {% endif %}
-                        profile
-                    </div>
+                        <h2 class="form-pane__title">Profile</h2>
+                    </header>
                     {% for field in profile_form %}
                         <div class="form__field">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <label class="form__field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                             {{ field }}
                             {% if field.errors %}
                                 <div class="form__field-errors">{{ field.errors }}</div>
@@ -62,8 +61,8 @@
                 </section>
 
                 <div class="form__actions account-grid__actions">
-                    <button type="submit" class="btn">save changes &nearr;</button>
-                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">cancel</a>
+                    <button type="submit" class="btn btn--primary">Save changes</button>
+                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">Cancel</a>
                 </div>
             </form>
         </div>

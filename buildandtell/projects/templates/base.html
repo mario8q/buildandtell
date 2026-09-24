@@ -7,39 +7,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=11">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=13">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
     <header class="site-header">
         <div class="container site-header__inner">
-            <a class="brand" href="/projects/">
+            <a class="brand" href="{% url 'projects:project_list' %}">
                 <span class="brand__mark">B&amp;T</span>
-                Build<span class="brand__slash">&amp;</span>Tell
+                <span class="brand__name">Build<span class="brand__amp">&amp;</span>Tell</span>
             </a>
-            <nav class="site-nav">
-                <a class="site-nav__link" href="/projects/">Projects</a>
-                <a class="site-nav__link" href="/admin/">Admin</a>
+            <nav class="site-nav" aria-label="Primary">
+                <a class="site-nav__link{% if request.resolver_match.namespace == 'projects' and request.resolver_match.url_name == 'project_list' %} site-nav__link--active{% endif %}"
+                   href="{% url 'projects:project_list' %}"
+                   {% if request.resolver_match.namespace == 'projects' and request.resolver_match.url_name == 'project_list' %}aria-current="page"{% endif %}>
+                    Projects
+                </a>
+                {% if request.user.is_authenticated %}
+                    <a class="site-nav__link{% if request.resolver_match.namespace == 'projects' and request.resolver_match.url_name == 'project_user_list' %} site-nav__link--active{% endif %}"
+                       href="{% url 'projects:project_user_list' username=request.user.username %}"
+                       {% if request.resolver_match.namespace == 'projects' and request.resolver_match.url_name == 'project_user_list' %}aria-current="page"{% endif %}>
+                        My Projects
+                    </a>
+                {% endif %}
+                <a class="site-nav__link{% if request.path|slice:':6' == '/admin' %} site-nav__link--active{% endif %}"
+                   href="/admin/"
+                   {% if request.path|slice:':6' == '/admin' %}aria-current="page"{% endif %}>
+                    Admin
+                </a>
                 {% if request.user.is_authenticated %}
                     <span class="site-nav__divider" aria-hidden="true"></span>
-                    <a class="user-chip" href="{% url 'account:edit_profile' %}" title="Edit profile">
+                    <a class="user-chip" href="{{ request.user.profile.get_absolute_url }}" title="Profile">
                         {% if request.user.profile.image %}
                             <img class="user-chip__avatar"
                                  src="{% thumbnail request.user.profile.image 32x32 crop='smart' quality=90 %}"
                                  alt="">
                         {% else %}
-                            <span class="user-chip__avatar user-chip__avatar--fallback">{{ request.user.username|slice:":1"|upper }}</span>
+                            <span class="user-chip__avatar" aria-hidden="true">{{ request.user.username|slice:":1"|upper }}</span>
                         {% endif %}
                         <span class="user-chip__name">{{ request.user.username }}</span>
                     </a>
                     <form class="logout-form" method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="logout-form__btn" title="Log out">logout()</button>
+                        <button type="submit" class="logout-form__btn" title="Log out">Log out</button>
                     </form>
                 {% else %}
-                    <a class="site-nav__link site-nav__link--login" href="{% url 'login' %}">login</a>
-                    <a class="site-nav__btn" href="{% url 'account:register' %}">register()</a>
+                    <a class="site-nav__link site-nav__login" href="{% url 'login' %}">Log in</a>
+                    <a class="site-nav__btn" href="{% url 'account:register' %}">Register</a>
                 {% endif %}
             </nav>
         </div>
@@ -60,7 +75,7 @@
     <footer class="site-footer">
         <div class="container site-footer__inner">
             <span>Build&Tell</span>
-            <span>Document what you build.</span>
+            <span>Show what you built, and how you built it.</span>
         </div>
     </footer>
 </body>

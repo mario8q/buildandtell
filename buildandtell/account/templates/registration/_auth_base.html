@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container page">
+    <div class="container page page--auth">
         <div class="auth">
             <div class="auth__card">
-                <div class="auth__bar">
-                    <span class="auth__dot"></span>
-                    <span class="auth__dot"></span>
-                    <span class="auth__dot"></span>
-                    <span class="auth__title">{% block auth_call %}auth.module{}(){% endblock auth_call %}</span>
+                <div class="auth__head">
+                    <h1 class="auth__title">{% block auth_title %}{% endblock auth_title %}</h1>
+                    {% block auth_sub %}{% endblock auth_sub %}
                 </div>
                 <div class="auth__body">
                     {% block auth_body %}{% endblock auth_body %}

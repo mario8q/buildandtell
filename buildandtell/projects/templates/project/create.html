@@ -1,19 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}new project · Build&Tell{% endblock title %}
+{% block title %}New project · Build&Tell{% endblock title %}
 
 {% block content %}
     <div class="container page">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
         </nav>
 
         <div class="create">
             <header class="create__head">
-                <h1 class="create__title">
-                    <span class="create__fn">project</span><span class="create__callee">.create()</span>
-                </h1>
+                <h1 class="create__title">New project</h1>
                 <p class="create__sub">Spin up a new project and start logging every build.</p>
             </header>
 
@@ -25,7 +23,7 @@
 
                 {% for field in form %}
                     <div class="form__field">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label class="form__field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.errors %}
                             <div class="form__field-errors">{{ field.errors }}</div>
@@ -37,8 +35,8 @@
                 {% endfor %}
 
                 <div class="form__actions">
-                    <button type="submit" class="btn">create project &nearr;</button>
-                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">cancel</a>
+                    <button type="submit" class="btn btn--primary">Create project</button>
+                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">Cancel</a>
                 </div>
             </form>
         </div>

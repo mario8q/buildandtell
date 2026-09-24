@@ -6,14 +6,23 @@
 
 {% block content %}
     <div class="container page">
-        <nav class="breadcrumb">
-            <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            {% if request.GET.source == 'all-projects' %}
+                <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
+            {% else %}
+                <a href="{% url 'projects:project_user_list' username=project.user.username %}">&larr; Projects</a>
+            {% endif %}
         </nav>
 
         <header class="project-hero">
-            <div class="project-hero__top">
+            <div class="project-hero__title">
                 <h1>{{ project.title }}</h1>
-                <span class="badge" data-status="{{ project.status }}">{{ project.get_status_display }}</span>
+                <span class="badge badge--{{ project.status }}">{{ project.get_status_display }}</span>
+            </div>
+            <div class="project-hero__meta">
+                <span>/{{ project.slug }}</span>
+                <span>by <a href="{{ project.user.profile.get_absolute_url }}">{{ project.user.username }}</a></span>
+                <span>Created <time datetime="{{ project.created|date:'c' }}">{{ project.created|date:"M j, Y" }}</time></span>
             </div>
             {% if project.description %}
                 <div class="project-hero__desc">{{ project.description|linebreaks }}</div>
@@ -28,45 +37,33 @@
             </main>
 
             <aside class="detail-side">
-                <div class="panel">
-                    <!-- {% if project.image %}
-                        <div class="panel__media">
-                            <img src="{% thumbnail project.image 380x240 crop='smart' quality=90 %}" alt="{{ project.title }}">
-                        </div>
-                    {% else %}
-                        <div class="panel__media panel__media--placeholder">
-                            <img src="{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}" alt="{{ project.title }}">
-                        </div>
-                    {% endif %} -->
-                    <div class="panel__media">
+                <div class="meta-card">
+                    <div class="meta-card__media{% if not project.image %} meta-card__media--placeholder{% endif %}">
                         <img src="{% if project.image %}{% thumbnail project.image 380x240 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
                     </div>
-                    <div class="panel__bar">
-                        <span class="panel__dot"></span>
-                        <span class="panel__dot"></span>
-                        <span class="panel__dot"></span>
-                        <span class="panel__title">${"project"}:metadata</span>
+                    <div class="meta-card__head">
+                        <h3>Metadata</h3>
                     </div>
                     <dl class="meta-list">
                         <div class="meta-row">
-                            <dt>author</dt>
-                            <dd>{{ project.user.username }}</dd>
+                            <dt class="meta-row__label">Author</dt>
+                            <dd class="meta-row__value">{{ project.user.username }}</dd>
                         </div>
                         <div class="meta-row">
-                            <dt>status</dt>
-                            <dd>{{ project.get_status_display }}</dd>
+                            <dt class="meta-row__label">Status</dt>
+                            <dd class="meta-row__value">{{ project.get_status_display }}</dd>
                         </div>
                         <div class="meta-row">
-                            <dt>created</dt>
-                            <dd><time datetime="{{ project.created|date:'c' }}">{{ project.created|date:"M j, Y" }}</time></dd>
+                            <dt class="meta-row__label">Created</dt>
+                            <dd class="meta-row__value"><time datetime="{{ project.created|date:'c' }}">{{ project.created|date:"M j, Y" }}</time></dd>
                         </div>
                         <div class="meta-row">
-                            <dt>updated</dt>
-                            <dd><time datetime="{{ project.updated|date:'c' }}">{{ project.updated|date:"M j, Y" }}</time></dd>
+                            <dt class="meta-row__label">Updated</dt>
+                            <dd class="meta-row__value"><time datetime="{{ project.updated|date:'c' }}">{{ project.updated|date:"M j, Y" }}</time></dd>
                         </div>
                         <div class="meta-row">
-                            <dt>repo</dt>
-                            <dd>
+                            <dt class="meta-row__label">Repository</dt>
+                            <dd class="meta-row__value">
                                 {% if project.repo_url %}
                                     <a href="{{ project.repo_url }}" target="_blank" rel="noopener">{{ project.repo_url|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
                                 {% else %}
@@ -75,8 +72,8 @@
                             </dd>
                         </div>
                         <div class="meta-row">
-                            <dt>site</dt>
-                            <dd>
+                            <dt class="meta-row__label">Website</dt>
+                            <dd class="meta-row__value">
                                 {% if project.website_url %}
                                     <a href="{{ project.website_url }}" target="_blank" rel="noopener">{{ project.website_url|cut:'https://'|cut:'http://'|truncatechars:30 }}</a>
                                 {% else %}
@@ -86,18 +83,18 @@
                         </div>
                     </dl>
                     {% if project.repo_url or project.website_url %}
-                        <div class="panel__actions">
+                        <div class="meta-card__actions">
                             {% if project.repo_url %}
-                                <a class="btn" href="{{ project.repo_url }}" target="_blank" rel="noopener">view repo &nearr;</a>
+                                <a class="btn btn--ghost" href="{{ project.repo_url }}" target="_blank" rel="noopener">View repository</a>
                             {% endif %}
                             {% if project.website_url %}
-                                <a class="btn btn--ghost" href="{{ project.website_url }}" target="_blank" rel="noopener">visit site &nearr;</a>
+                                <a class="btn btn--ghost" href="{{ project.website_url }}" target="_blank" rel="noopener">Visit website</a>
                             {% endif %}
                         </div>
                     {% endif %}
                     {% if user == project.user %}
-                        <div class="panel__actions">
-                            <a class="btn btn--primary" href="{% url 'projects:build_update_create' project.slug %}">log build update &nearr;</a>
+                        <div class="meta-card__actions">
+                            <a class="btn btn--primary" href="{% url 'projects:build_update_create' project.slug %}">Log build update</a>
                         </div>
                     {% endif %}
                 </div>

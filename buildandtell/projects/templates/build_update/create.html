@@ -1,20 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}new build update · Build&Tell{% endblock title %}
+{% block title %}New build update · Build&Tell{% endblock title %}
 
 {% block content %}
     <div class="container page">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="{{ project.get_absolute_url }}">&larr; {{ project.title }}</a>
         </nav>
 
         <div class="create">
             <header class="create__head">
-                <h1 class="create__title">
-                    <span class="create__fn">build_update</span><span class="create__callee">.create(</span>
-                    <span class="create__arg">project: "{{ project.title }}"</span><span class="create__callee">)</span>
-                </h1>
+                <h1 class="create__title">Log a build update</h1>
                 <p class="create__sub">Log a build, lesson, or change for
                     <a class="text-link" href="{{ project.get_absolute_url }}">{{ project.title }}</a>.
                 </p>
@@ -28,7 +25,7 @@
 
                 {% for field in form %}
                     <div class="form__field">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label class="form__field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.errors %}
                             <div class="form__field-errors">{{ field.errors }}</div>
@@ -40,8 +37,8 @@
                 {% endfor %}
 
                 <div class="form__actions">
-                    <button type="submit" class="btn">log update &nearr;</button>
-                    <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">cancel</a>
+                    <button type="submit" class="btn btn--primary">Log update</button>
+                    <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">Cancel</a>
                 </div>
             </form>
         </div>
