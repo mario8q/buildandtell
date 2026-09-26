@@ -1,8 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from .models import Project, BuildUpdate
 from .forms import CreateBuildUpdateForm, CreateProjectForm
+
+def dashboard(request):
+    projects = Project.objects.select_related('user')
+    recent_projects = projects[:3]
+    recent_updates = (
+        BuildUpdate.objects
+        .select_related('project', 'project__user')[:5]
+    )
+    return render(
+        request,
+        'dashboard/dashboard.html',
+        {
+            'total_projects': projects.count(),
+            'total_updates': BuildUpdate.objects.count(),
+            'builders': get_user_model().objects.count(),
+            'recent_projects': recent_projects,
+            'recent_updates': recent_updates,
+        }
+    )
 
 def project_list(request):
     if request.user.is_authenticated:
@@ -15,6 +35,7 @@ def project_list(request):
         {'projects': projects}
     )
 
+@login_required
 def project_user_list(request, username):
     projects = Project.objects.filter(user=request.user)
     return render(

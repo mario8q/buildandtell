@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Build&Tell — build it, tell the story{% endblock title %}
+
+{% block content %}
+    <header class="dash-hero">
+        <div class="container dash-hero__inner">
+            <div class="dash-hero__content">
+                <p class="dash-kicker">Build &amp; Tell</p>
+                <h1 class="dash-hero__title">Build it.<br>Tell the story.</h1>
+                <p class="dash-hero__sub">
+                    A home for <strong>what you build</strong> and <strong>how you build it</strong>.
+                    Document every project while the details are still fresh, log milestones as they
+                    ship, and share the process on a public builder profile.
+                </p>
+                <div class="dash-hero__actions">
+                    {% if request.user.is_authenticated %}
+                        <a class="btn btn--hero" href="{% url 'projects:project_create' %}">Start documenting</a>
+                    {% else %}
+                        <a class="btn btn--hero" href="{% url 'account:register' %}">Start building — it’s free</a>
+                    {% endif %}
+                    <a class="btn btn--hero-ghost" href="{% url 'projects:project_list' %}">Browse projects</a>
+                </div>
+            </div>
+
+            <dl class="dash-hero__stats">
+                <div class="dash-hero__stat">
+                    <dt>Projects documented</dt>
+                    <dd>{{ total_projects }}</dd>
+                </div>
+                <div class="dash-hero__stat">
+                    <dt>Build updates logged</dt>
+                    <dd>{{ total_updates }}</dd>
+                </div>
+                <div class="dash-hero__stat">
+                    <dt>Builders sharing</dt>
+                    <dd>{{ builders }}</dd>
+                </div>
+            </dl>
+        </div>
+    </header>
+
+    <section class="dash-section">
+        <div class="container">
+            <header class="dash-section__head">
+                <h2>How Build&amp;Tell works</h2>
+                <p>Three steps between an idea and a story worth reading.</p>
+            </header>
+
+            <ol class="dash-steps">
+                <li class="dash-step">
+                    <span class="dash-step__num">01</span>
+                    <h3>Start a project</h3>
+                    <p>Give it a title, a description and a cover. Set a status — planning, in progress, completed or archived — so the reader always knows where things stand.</p>
+                </li>
+                <li class="dash-step">
+                    <span class="dash-step__num">02</span>
+                    <h3>Log as you go</h3>
+                    <p>Capture features, fixes, bugs, experiments and milestones the moment they happen. Each entry is typed and time-stamped, so the trail stays honest.</p>
+                </li>
+                <li class="dash-step">
+                    <span class="dash-step__num">03</span>
+                    <h3>Share the story</h3>
+                    <p>Every project gets a public page linked from your builder profile. Add your website and GitHub, and let people read how the thing actually came to be.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="dash-section">
+        <div class="container">
+            <header class="dash-section__head">
+                <h2>What Build&amp;Tell offers</h2>
+                <p>Everything a curious reader needs to understand a project’s journey.</p>
+            </header>
+
+            <div class="dash-grid">
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">ST</span>
+                    <h3>Live project statuses</h3>
+                    <p>Track projects from planning to completed (or archived) with colour-coded badges that always tell the current state of the work.</p>
+                </article>
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">&#43;&#43;</span>
+                    <h3>Nine update types</h3>
+                    <p>Tag each entry as a Feature, Bug, Fix, Improvement, Learning, Architecture, Experiment, Milestone or Note — a vocabulary the whole log speaks.</p>
+                </article>
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">@</span>
+                    <h3>Builder profiles</h3>
+                    <p>A public page for who you are: bio, avatar, website and GitHub. Readers get your background, not just your output.</p>
+                </article>
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">&#8764;&#8764;</span>
+                    <h3>Every step time-stamped</h3>
+                    <p>A timeline that makes the process visible. Readers follow the build update by update, not just the finished result.</p>
+                </article>
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">&lt;/&gt;</span>
+                    <h3>Links &amp; context</h3>
+                    <p>Point each project at its repository and live site, so the code and the product are one click away from the story.</p>
+                </article>
+                <article class="dash-card">
+                    <span class="dash-card__glyph" aria-hidden="true">01</span>
+                    <h3>History from day one</h3>
+                    <p>The why gets recorded while it’s fresh. Later readers — or future you — get the honest reasons behind every decision.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="dash-section">
+        <div class="container">
+            <header class="dash-section__head">
+                <h2>Live on Build&amp;Tell</h2>
+                <p>The latest projects and updates, straight from the feed.</p>
+            </header>
+
+            <div class="dash-live">
+                <div>
+                    <h3 class="dash-live__title">Recently documented</h3>
+                    {% if recent_projects %}
+                        <div class="live-list">
+                            {% for project in recent_projects %}
+                                <a class="live-row" href="{{ project.get_absolute_url }}">
+                                    <img class="live-row__thumb"
+                                            src="{% if project.image %}{% thumbnail project.image 112x112 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}"
+                                            alt="{{ project.title }}">
+                                    <span class="live-row__text">
+                                        <span class="live-row__title">{{ project.title }}</span>
+                                        <span class="live-row__meta">by {{ project.user.username }} · {{ project.updated|date:"M j, Y" }}</span>
+                                    </span>
+                                    <span class="badge badge--{{ project.status }}">{{ project.get_status_display }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty">
+                            <p>No projects yet — be the first.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <h3 class="dash-live__title">Latest build updates</h3>
+                    {% if recent_updates %}
+                        <ol class="timeline">
+                            {% for update in recent_updates %}
+                                <li class="timeline__item">
+                                    <article class="update">
+                                        <header class="update__head">
+                                            <div class="update__title">
+                                                <h3>{{ update.title }}</h3>
+                                                <span class="update__project">in <a href="{{ update.project.get_absolute_url }}">{{ update.project.title }}</a></span>
+                                            </div>
+                                            <span class="badge badge--type">{{ update.get_type_display }}</span>
+                                        </header>
+                                        <footer class="update__meta">
+                                            <time datetime="{{ update.created|date:'c' }}">{{ update.created|date:"M j, Y · H:i" }}</time>
+                                        </footer>
+                                    </article>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <div class="updates__empty">
+                            <p>Nothing logged yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dash-section">
+        <div class="container">
+            <div class="dash-cta">
+                <h2>The story is the difference.</h2>
+                <p>Any repo can show you what a project does. Build&amp;Tell shows you how it got there — one documented decision at a time.</p>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn--primary" href="{% url 'projects:project_create' %}">Start documenting</a>
+                {% else %}
+                    <a class="btn btn--primary" href="{% url 'account:register' %}">Create your free account</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}

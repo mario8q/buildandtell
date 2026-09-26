@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
     <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=13">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=14">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
     <header class="site-header">
         <div class="container site-header__inner">
-            <a class="brand" href="{% url 'projects:project_list' %}">
+            <a class="brand" href="{% url 'dashboard' %}">
                 <span class="brand__mark">B&amp;T</span>
                 <span class="brand__name">Build<span class="brand__amp">&amp;</span>Tell</span>
             </a>

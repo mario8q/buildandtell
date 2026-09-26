@@ -18,8 +18,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from projects import views as projects_views
 
 urlpatterns = [
+    path('', projects_views.dashboard, name='dashboard'),
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls),
     path('account/', include('django.contrib.auth.urls')),

@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'buildandtell.urls'
@@ -169,5 +170,4 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
-LOGIN_REDIRECT_URL = '/projects/'
-LOGOUT_REDIRECT_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/'
