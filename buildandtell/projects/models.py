@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.utils.text import slugify
-
+from taggit.managers import TaggableManager
 class Project(models.Model):
     class Status(models.TextChoices):
         PLANNING = 'PL', 'planning'
@@ -22,6 +22,7 @@ class Project(models.Model):
     )
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    tags = TaggableManager(blank=True, help_text='separate tags with commas')
     description = models.TextField()
     status = models.CharField(
         choices=Status.choices, 

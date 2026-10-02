@@ -20,7 +20,7 @@ class Profile(models.Model):
     github = models.URLField(blank=True)
 
     def get_absolute_url(self):
-        return reverse("account:user_detail", args=[self.user.username])
+        return reverse("account:user_detail", kwargs={'username': self.user.username})
 
     def __str__(self):
         return f'Profile of {self.user.username}'

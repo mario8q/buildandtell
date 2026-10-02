@@ -65,8 +65,8 @@ def edit_profile(request):
         else:
             messages.error(request, 'there was an error with the form')
     else:
-        user_form = UserEditForm()
-        profile_form = ProfileEditForm()
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
     return render(
         request,
         'account/edit.html',

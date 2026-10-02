@@ -10,7 +10,7 @@
             {% if request.GET.source == 'all-projects' %}
                 <a href="{% url 'projects:project_list' %}">&larr; Projects</a>
             {% else %}
-                <a href="{% url 'projects:project_user_list' username=project.user.username %}">&larr; Projects</a>
+                <a href="{% url 'projects:project_user_list' username=project.user.username %}">&larr; My projects</a>
             {% endif %}
         </nav>
 
@@ -95,6 +95,7 @@
                     {% if user == project.user %}
                         <div class="meta-card__actions">
                             <a class="btn btn--primary" href="{% url 'projects:build_update_create' project.slug %}">Log build update</a>
+                            <a class="btn btn--ghost" href="{% url 'projects:project_edit' project.slug %}">Edit project</a>
                         </div>
                     {% endif %}
                 </div>

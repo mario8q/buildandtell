@@ -1,0 +1,15 @@
+{% if projects.paginator.num_pages > 1 %}
+    <nav class="pagination" aria-label="Pagination">
+        {% if projects.has_previous %}
+            <a class="btn btn--ghost" href="?page={{ projects.previous_page_number }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}">&larr; Newer</a>
+        {% else %}
+            <span class="btn btn--ghost is-disabled" aria-disabled="true">&larr; Newer</span>
+        {% endif %}
+        <span class="pagination__current">Page {{ projects.number }} of {{ projects.paginator.num_pages }}</span>
+        {% if projects.has_next %}
+            <a class="btn btn--ghost" href="?page={{ projects.next_page_number }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}">Older &rarr;</a>
+        {% else %}
+            <span class="btn btn--ghost is-disabled" aria-disabled="true">Older &rarr;</span>
+        {% endif %}
+    </nav>
+{% endif %}

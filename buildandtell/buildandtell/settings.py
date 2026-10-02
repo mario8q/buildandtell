@@ -40,13 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'django_extensions',
+    'debug_toolbar',
     'social_django', 
     'easy_thumbnails',
+    'taggit',
     'projects.apps.ProjectsConfig'
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,6 +134,10 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
@@ -171,3 +179,6 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
+
+# Taggit parser
+TAGGIT_TAGS_FROM_STRING = "projects.tagutils.parse_tags"

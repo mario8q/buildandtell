@@ -2,8 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.aggregates import StringAgg
+from taggit.models import Tag
 from .models import Project, BuildUpdate
-from .forms import CreateBuildUpdateForm, CreateProjectForm
+from .forms import CreateBuildUpdateForm, CreateProjectForm, SearchProjectForm
+
 
 def dashboard(request):
     projects = Project.objects.select_related('user')
@@ -24,24 +30,63 @@ def dashboard(request):
         }
     )
 
-def project_list(request):
+def project_list(request, tag_slug = None):
+    tag = None
     if request.user.is_authenticated:
-        projects = Project.objects.exclude(user=request.user, status=Project.Status.ARCHIVED)
+        list_projects = Project.objects.exclude(user=request.user, status=Project.Status.ARCHIVED)
     else:
-        projects = Project.objects.all()
+        list_projects = Project.objects.all()
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        list_projects = list_projects.filter(tags__in=[tag])
+    all_tags = Project.tags.most_common()
+    paginator = Paginator(list_projects, 6)
+    page_number = request.GET.get('page', 1)
+    try:
+        projects = paginator.page(page_number)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
     return render(
         request,
         'project/list.html',
-        {'projects': projects}
+        {'projects': projects, 'tag': tag, 'all_tags': all_tags}
     )
 
 @login_required
-def project_user_list(request, username):
-    projects = Project.objects.filter(user=request.user)
+def project_user_list(request, username, tag_slug = None):
+    tag = None
+    list_projects = Project.objects.filter(user=request.user)
+    all_user_tags = Project.tags.most_common(extra_filters={"project__user": request.user})
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        list_projects = list_projects.filter(tags__in=[tag])
+    
+    paginator = Paginator(list_projects, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        projects = paginator.page(page_number)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+
+    status_totals = {
+        s['status']: s['total'] for s in list_projects.values('status').annotate(total=Count('id'))
+    }
+    update_count = BuildUpdate.objects.filter(project__user=request.user).count()
     return render(
         request,
         'project/user_list.html',
-        {'projects': projects, 'username': username}
+        {
+            'projects': projects,
+            'username': username,
+            'tag': tag,
+            'all_user_tags': all_user_tags,
+            'status_totals': status_totals,
+            'update_count': update_count,
+        }
     )
 
 def project_detail(request, slug):
@@ -60,6 +105,7 @@ def project_create(request):
             new_project = project_form.save(commit=False)
             new_project.user = request.user
             new_project.save()
+            project_form.save_m2m()
             messages.success(request, 'project created succsessfully')
             return redirect(new_project.get_absolute_url())
         else:
@@ -145,3 +191,46 @@ def build_update_delete(request, slug):
     build_update.delete()
     messages.success(request, 'build update deleted succsessfully')
     return redirect(project.get_absolute_url())
+
+def project_search(request):
+    query = request.GET.get('query', '').strip()
+    form = SearchProjectForm(request.GET or None)
+    tag = None
+    all_tags = Project.tags.most_common()
+
+    list_projects = Project.objects.all()
+    if request.user.is_authenticated:
+        list_projects = list_projects.exclude(user=request.user, status=Project.Status.ARCHIVED)
+
+    if query and form.is_valid():
+        query = form.cleaned_data['query']
+        tags_text = StringAgg('tagged_items__tag__name', delimiter=' ', distinct=True)
+        vector = SearchVector('title', 'description', 'slug', weight='A') + SearchVector('tags_text', weight='B')
+        list_projects = (
+            list_projects
+            .annotate(tags_text=tags_text)
+            .annotate(rank=SearchRank(vector, SearchQuery(query)))
+            .filter(rank__gte=0.2)
+            .order_by('-rank')
+        )
+
+    paginator = Paginator(list_projects, 6)
+    page_num = request.GET.get('page', 1)
+    try:
+        projects = paginator.page(page_num)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        'project/list.html',
+        {
+            'projects': projects,
+            'tag': tag,
+            'all_tags': all_tags,
+            'query': query,
+            'search_active': bool(query),
+        }
+    )

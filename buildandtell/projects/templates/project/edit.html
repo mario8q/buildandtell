@@ -34,15 +34,6 @@
                     </div>
                 {% endfor %}
 
-                {% if project.image %}
-                    <div class="form__current">
-                        <span class="form__current-label">Current image</span>
-                        <img class="form__current-image"
-                             src="{% thumbnail project.image 640x360 crop='smart' quality=90 %}"
-                             alt="{{ project.title }}">
-                    </div>
-                {% endif %}
-
                 <div class="form__actions">
                     <button type="submit" class="btn btn--primary">Save changes</button>
                     <a class="btn btn--ghost" href="{{ project.get_absolute_url }}">Cancel</a>

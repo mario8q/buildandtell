@@ -1,13 +1,15 @@
 from django import forms
+from taggit.forms import TagWidget
 from .models import Project, BuildUpdate
 
 class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'image', 'default_image', 'status', 'repo_url', 'website_url']
+        fields = ['title', 'description', 'tags', 'image', 'default_image', 'status', 'repo_url', 'website_url']
         labels = {
             'title': 'title',
             'description': 'description',
+            'tags': 'tags',
             'image': 'image',
             'default_image': 'default image',
             'status': 'status',
@@ -19,14 +21,18 @@ class CreateProjectForm(forms.ModelForm):
                 'class': 'input',
                 'placeholder': 'short project name',
             }),
-            'description': forms.Textarea(attrs={
+            'description': forms.TextInput(attrs={
                 'class': 'input',
                 'rows': 5,
                 'placeholder': 'What are you building and why?',
             }),
+            'tags': TagWidget(attrs={
+                'class': 'input',
+                'placeholder': 'python, django, api',
+            }),
             'image': forms.ClearableFileInput(attrs={
                 'class': 'input input--file',
-                'accept': 'image/jpeg,image/png',
+                'accept': 'image/jpeg,image/png,image/jpg',
             }),
             'default_image': forms.Select(attrs={'class': 'input'}),
             'status': forms.Select(attrs={'class': 'input'}),
@@ -39,29 +45,6 @@ class CreateProjectForm(forms.ModelForm):
                 'placeholder': 'https://your-project.dev',
             }),
         }
-
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-
-        if not image:
-            return image
-
-        allowed_extensions = ['jpg', 'jpeg', 'png']
-        allowed_types = ['image/jpeg', 'image/png']
-
-        extension = image.name.split('.')[-1].lower()
-
-        if extension not in allowed_extensions:
-            raise forms.ValidationError(
-                'Format is invalid.'
-            )
-
-        if image.content_type not in allowed_types:
-            raise forms.ValidationError(
-                'Image type not valid.'
-            )
-
-        return image
 
 class CreateBuildUpdateForm(forms.ModelForm):
     class Meta:
@@ -84,3 +67,6 @@ class CreateBuildUpdateForm(forms.ModelForm):
                 'placeholder': 'What did you ship, learn, or change?',
             }),
         }
+
+class SearchProjectForm(forms.Form):
+    query = forms.CharField(max_length=255)

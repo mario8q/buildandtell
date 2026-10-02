@@ -62,7 +62,7 @@
 
                 <div class="form__actions account-grid__actions">
                     <button type="submit" class="btn btn--primary">Save changes</button>
-                    <a class="btn btn--ghost" href="{% url 'projects:project_list' %}">Cancel</a>
+                    <a class="btn btn--ghost" href="{{ request.user.profile.get_absolute_url }}">Cancel</a>
                 </div>
             </form>
         </div>
