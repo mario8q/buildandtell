@@ -854,6 +854,18 @@ code {
   color: var(--text-faint);
 }
 
+/* Chip rows inside meta (tags / technologies) */
+.meta-row--tags {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.meta-row--tags .meta-row__value {
+  width: 100%;
+  text-align: left;
+}
+
 .meta-card__actions {
   display: flex;
   flex-direction: column;
@@ -1225,6 +1237,36 @@ a.tag:hover {
   color: #fff;
 }
 
+/* Technology chips (visually distinct from tags) */
+.tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px;
+  border: 1px solid var(--success-border);
+  border-radius: var(--radius-sm);
+  background: var(--success-bg);
+  color: var(--success);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.tech-chip::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
 .card__tags {
   display: flex;
   flex-wrap: wrap;
@@ -1460,6 +1502,49 @@ select.input {
   background-position: right 12px center;
   background-repeat: no-repeat;
   cursor: pointer;
+}
+
+/* Tom Select (searchable multi-select) */
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control {
+  min-height: 42px;
+  border-radius: var(--radius);
+  border-color: var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: none;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.ts-wrapper.multi .ts-control .item {
+  border-radius: 999px;
+  border-color: var(--accent-soft);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+
+.ts-wrapper.focus .ts-control,
+.ts-control:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.ts-dropdown {
+  border-radius: var(--radius);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.ts-dropdown .option {
+  font-size: 0.88rem;
+}
+
+.ts-dropdown .option.active {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 input.input--file {

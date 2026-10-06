@@ -81,6 +81,30 @@
                                 {% endif %}
                             </dd>
                         </div>
+                        {% if project.tags.all %}
+                        <div class="meta-row meta-row--tags">
+                            <dt class="meta-row__label">Tags</dt>
+                            <dd class="meta-row__value">
+                                <div class="tech-chips">
+                                    {% for t in project.tags.all %}
+                                        <a class="tag" href="{% url 'projects:project_list_by_tag' t.slug %}">#{{ t.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </dd>
+                        </div>
+                        {% endif %}
+                        {% if project.technologies.all %}
+                        <div class="meta-row meta-row--tags">
+                            <dt class="meta-row__label">Technologies</dt>
+                            <dd class="meta-row__value">
+                                <div class="tech-chips">
+                                    {% for tech in project.technologies.all %}
+                                        <span class="tech-chip">{{ tech.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </dd>
+                        </div>
+                        {% endif %}
                     </dl>
                     {% if project.repo_url or project.website_url %}
                         <div class="meta-card__actions">

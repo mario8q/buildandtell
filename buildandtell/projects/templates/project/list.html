@@ -10,7 +10,7 @@
             <div class="page-head__text">
                 <h1 class="page-head__title">{% if query %}Search: &ldquo;{{ query }}&rdquo;{% elif tag %}Projects tagged #{{ tag.name }}{% else %}Projects{% endif %}</h1>
                 <p class="page-head__sub">Track and document your builds as you go — overview, updates, and everything in between.</p>
-                {% include 'project/search.html' %}
+                {% include 'project/search.html' with search_action='projects:project_search' %}
                 <p class="page-head__meta">
                     {{ projects|length }} project{{ projects|length|pluralize }}
                     {% if query %}

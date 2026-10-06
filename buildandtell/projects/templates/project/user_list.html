@@ -2,18 +2,21 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %}{% if tag %}{{ tag.name }} projects · Build&Tell{% else %}My projects · Build&Tell{% endif %}{% endblock title %}
+{% block title %}{% if query %}Search · {{ query }} · Build&Tell{% elif tag %}{{ tag.name }} projects · Build&Tell{% else %}My projects · Build&Tell{% endif %}{% endblock title %}
 
 {% block content %}
     <div class="container page">
         <header class="page-head page-head--row">
             <div class="page-head__text">
-                <h1 class="page-head__title">{% if tag %}My projects tagged #{{ tag.name }}{% else %}My projects{% endif %}</h1>
+                <h1 class="page-head__title">{% if query %}Search: &ldquo;{{ query }}&rdquo;{% elif tag %}My projects tagged #{{ tag.name }}{% else %}My projects{% endif %}</h1>
                 <p class="page-head__sub">Everything you are building — and everything you have already launched.</p>
+                {% include 'project/search.html' with search_action='projects:project_user_search' %}
                 <p class="page-head__meta">
                     {{ projects|length }} project{{ projects|length|pluralize }}
                     {% if update_count %} · {{ update_count }} build update{{ update_count|pluralize }}{% endif %}
-                    {% if tag %}
+                    {% if query %}
+                        · <a class="link-inline" href="{% url 'projects:project_user_list' username %}">show all my projects</a>
+                    {% elif tag %}
                         · <a class="link-inline" href="{% url 'projects:project_user_list' username %}">clear tag filter</a>
                     {% endif %}
                 </p>
@@ -23,7 +26,7 @@
 
         {% if all_user_tags %}
             <div class="tag-filter" aria-label="Filter projects by tag">
-                <span class="tag-filter__label">Tags</span>
+                <span class="tag-filter__label">My Tags</span>
                 {% for t in all_user_tags %}
                     <a class="tag{% if tag and tag.slug == t.slug %} is-active{% endif %}"
                        href="{% url 'projects:project_user_list_by_tag' username t.slug %}">#{{ t.name }}</a>
@@ -75,7 +78,10 @@
             {% include 'project/partials/pagination.html' %}
         {% else %}
             <div class="empty">
-                {% if tag %}
+                {% if query %}
+                    <p>No projects match &ldquo;{{ query }}&rdquo;.</p>
+                    <a class="btn btn--ghost" href="{% url 'projects:project_user_list' username %}">View all projects</a>
+                {% elif tag %}
                     <p>No projects tagged #{{ tag.name }} yet.</p>
                     <a class="btn btn--ghost" href="{% url 'projects:project_user_list' username %}">View all projects</a>
                 {% else %}

@@ -3,6 +3,13 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
+
+class Technology(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+
+    def __str__(self):
+        return self.name
 class Project(models.Model):
     class Status(models.TextChoices):
         PLANNING = 'PL', 'planning'
@@ -39,6 +46,7 @@ class Project(models.Model):
         choices=DefaultImage.choices,
         default=DefaultImage.DEFAULT_1
     )
+    technologies = models.ManyToManyField(Technology)
     repo_url = models.URLField(blank=True, null=True)
     website_url = models.URLField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -64,6 +72,8 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return reverse('projects:project_detail', kwargs={'slug': self.slug})
+
+
 class BuildUpdate(models.Model):
     class UpdateType(models.TextChoices):
         FEATURE = 'FE', 'Feature'

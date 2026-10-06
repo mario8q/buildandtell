@@ -5,7 +5,7 @@ from .models import Project, BuildUpdate
 class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'tags', 'image', 'default_image', 'status', 'repo_url', 'website_url']
+        fields = ['title', 'description', 'tags', 'image', 'default_image', 'status', 'technologies', 'repo_url', 'website_url']
         labels = {
             'title': 'title',
             'description': 'description',
@@ -36,6 +36,10 @@ class CreateProjectForm(forms.ModelForm):
             }),
             'default_image': forms.Select(attrs={'class': 'input'}),
             'status': forms.Select(attrs={'class': 'input'}),
+            'technologies': forms.SelectMultiple(attrs={
+                'class': 'input tom-select',
+                'placeholder': 'Search and select technologies...',
+            }),
             'repo_url': forms.URLInput(attrs={
                 'class': 'input',
                 'placeholder': 'https://github.com/you/your-repo',

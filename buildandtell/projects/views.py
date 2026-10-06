@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib.postgres.aggregates import StringAgg
+from django.http import Http404
 from taggit.models import Tag
 from .models import Project, BuildUpdate
 from .forms import CreateBuildUpdateForm, CreateProjectForm, SearchProjectForm
@@ -192,22 +194,30 @@ def build_update_delete(request, slug):
     messages.success(request, 'build update deleted succsessfully')
     return redirect(project.get_absolute_url())
 
-def project_search(request):
+def project_search(request, filtrate):
     query = request.GET.get('query', '').strip()
     form = SearchProjectForm(request.GET or None)
     tag = None
-    all_tags = Project.tags.most_common()
 
-    list_projects = Project.objects.all()
+    if filtrate == 'user':
+        if not request.user.is_authenticated:
+            return redirect('login')
+        base = Project.objects.filter(user=request.user)
+    elif filtrate == 'all':
+        base = Project.objects.all()
+    else:
+        raise Http404("Invalid project filter")
+
     if request.user.is_authenticated:
-        list_projects = list_projects.exclude(user=request.user, status=Project.Status.ARCHIVED)
+        base = base.exclude(user=request.user, status=Project.Status.ARCHIVED)
 
+    list_projects = base
     if query and form.is_valid():
         query = form.cleaned_data['query']
         tags_text = StringAgg('tagged_items__tag__name', delimiter=' ', distinct=True)
         vector = SearchVector('title', 'description', 'slug', weight='A') + SearchVector('tags_text', weight='B')
         list_projects = (
-            list_projects
+            base
             .annotate(tags_text=tags_text)
             .annotate(rank=SearchRank(vector, SearchQuery(query)))
             .filter(rank__gte=0.2)
@@ -223,13 +233,32 @@ def project_search(request):
     except EmptyPage:
         projects = paginator.page(paginator.num_pages)
 
+    if filtrate == 'user':
+        return render(
+            request,
+            'project/user_list.html',
+            {
+                'projects': projects,
+                'username': request.user.username,
+                'tag': tag,
+                'all_user_tags': Project.tags.most_common(extra_filters={"project__user": request.user}),
+                'status_totals': {
+                    s['status']: s['total']
+                    for s in base.values('status').annotate(total=Count('id'))
+                },
+                'update_count': BuildUpdate.objects.filter(project__user=request.user).count(),
+                'query': query,
+                'search_active': bool(query),
+            }
+        )
+
     return render(
         request,
         'project/list.html',
         {
             'projects': projects,
             'tag': tag,
-            'all_tags': all_tags,
+            'all_tags': Project.tags.most_common(),
             'query': query,
             'search_active': bool(query),
         }

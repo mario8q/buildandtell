@@ -1,7 +1,12 @@
 from django.contrib import admin
-from .models import Project, BuildUpdate
+from .models import Technology, Project, BuildUpdate
 
-# Register your models here.
+@admin.register(Technology)
+class TechnologyAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+    search_fields = ['name']
+    prepopulated_fields = {'slug': ('name',)}
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['user', 'title', 'slug', 'status', 'repo_url', 'website_url', 'created', 'updated']
