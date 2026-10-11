@@ -8,7 +8,6 @@
     <header class="dash-hero">
         <div class="container dash-hero__inner">
             <div class="dash-hero__content">
-                <p class="dash-kicker">Build &amp; Tell</p>
                 <h1 class="dash-hero__title">Build it.<br>Tell the story.</h1>
                 <p class="dash-hero__sub">
                     A home for <strong>what you build</strong> and <strong>how you build it</strong>.
@@ -19,7 +18,7 @@
                     {% if request.user.is_authenticated %}
                         <a class="btn btn--hero" href="{% url 'projects:project_create' %}">Start documenting</a>
                     {% else %}
-                        <a class="btn btn--hero" href="{% url 'account:register' %}">Start building — it’s free</a>
+                        <a class="btn btn--hero" href="{% url 'account:register' %}">Start building</a>
                     {% endif %}
                     <a class="btn btn--hero-ghost" href="{% url 'projects:project_list' %}">Browse projects</a>
                 </div>
@@ -148,14 +147,14 @@
                     {% if recent_updates %}
                         <ol class="timeline">
                             {% for update in recent_updates %}
-                                <li class="timeline__item">
+                                <li class="timeline__item timeline__item--{{ update.type }}">
                                     <article class="update">
                                         <header class="update__head">
                                             <div class="update__title">
                                                 <h3>{{ update.title }}</h3>
                                                 <span class="update__project">in <a href="{{ update.project.get_absolute_url }}">{{ update.project.title }}</a></span>
                                             </div>
-                                            <span class="badge badge--type">{{ update.get_type_display }}</span>
+                                            <span class="badge badge--type badge--{{ update.type }}">{{ update.get_type_display }}</span>
                                         </header>
                                         <footer class="update__meta">
                                             <time datetime="{{ update.created|date:'c' }}">{{ update.created|date:"M j, Y · H:i" }}</time>

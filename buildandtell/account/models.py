@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from projects.models import Project
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -12,6 +13,12 @@ class Profile(models.Model):
         blank=True
     )
     bio = models.TextField(
+        blank=True
+    )
+
+    projects_stars = models.ManyToManyField(
+        Project,
+        related_name='users_stars',
         blank=True
     )
 

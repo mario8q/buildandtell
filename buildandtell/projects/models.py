@@ -29,7 +29,7 @@ class Project(models.Model):
     )
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    tags = TaggableManager(blank=True, help_text='separate tags with commas')
+    tags = TaggableManager(blank=True)
     description = models.TextField()
     status = models.CharField(
         choices=Status.choices, 
@@ -47,7 +47,8 @@ class Project(models.Model):
         default=DefaultImage.DEFAULT_1
     )
     technologies = models.ManyToManyField(Technology)
-    repo_url = models.URLField(blank=True, null=True)
+    stars = models.PositiveIntegerField(default=0)
+    repo_url = models.URLField(blank=True, null=True, help_text='use a github repository to sync your commits automatically')
     website_url = models.URLField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -84,6 +85,7 @@ class BuildUpdate(models.Model):
         ARCHITECTURE = 'AR', 'Architecture'
         EXPERIMENT = 'EX', 'Experiment'
         MILESTONE = 'MI', 'Milestone'
+        GITHUB_COMMIT = 'GH', 'Github commit'
         NOTE = 'NO', 'Note'
 
     project = models.ForeignKey(
@@ -98,7 +100,7 @@ class BuildUpdate(models.Model):
         default=UpdateType.NOTE
     )
     body = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField()
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:

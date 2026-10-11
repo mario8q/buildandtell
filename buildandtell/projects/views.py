@@ -8,9 +8,14 @@ from django.db.models import Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib.postgres.aggregates import StringAgg
 from django.http import Http404
+from django.http.response import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from taggit.models import Tag
+from .utils import is_github_repo
+from .services import fetch_github_commits, create_build_updates_from
 from .models import Project, BuildUpdate
-from .forms import CreateBuildUpdateForm, CreateProjectForm, SearchProjectForm
+from .forms import CreateBuildUpdateForm, CreateProjectForm, SearchProjectForm, SyncBuildUpdateForm
 
 
 def dashboard(request):
@@ -93,10 +98,16 @@ def project_user_list(request, username, tag_slug = None):
 
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
+    is_starred = False
+    github_repo = False
+    if request.user.is_authenticated and request.user.profile.projects_stars.filter(pk=project.pk).exists():
+        is_starred = True
+    if project.repo_url and is_github_repo(project.repo_url):
+        github_repo = True
     return render(
         request,
         'project/detail.html',
-        {'project': project}
+        {'project': project, 'is_starred': is_starred, 'github_repo': github_repo}
     )
 
 @login_required
@@ -168,6 +179,21 @@ def build_update_create(request, slug):
     )
 
 @login_required
+@require_POST
+def build_update_sync_with_github(request, slug):
+    project = get_object_or_404(Project, slug=slug, user=request.user)
+    form = SyncBuildUpdateForm(request.POST)
+    if form.is_valid():
+        owner = form.cleaned_data['owner']
+        repo = form.cleaned_data['repo']
+        commits_list = fetch_github_commits(owner, repo)
+        create_build_updates_from(commits_list, owner, repo, project)
+        messages.success(request, 'build update(s) created succsessfully from github commits')
+    else:
+        messages.error(request, 'there was an error with the sync')
+    return redirect('projects:project_detail', slug=project.slug)
+
+@login_required
 def build_update_edit(request, slug, id):
     project = get_object_or_404(Project, slug=slug, user=request.user)
     build_update = get_object_or_404(BuildUpdate, project=project, id=id)
@@ -183,13 +209,14 @@ def build_update_edit(request, slug, id):
     return render(
         request,
         'build_update/edit.html',
-        {'form': build_update_form, 'project': project}
+        {'form': build_update_form, 'project': project, 'build_update_id': build_update.id} # type: ignore
     )
 
 @login_required
-def build_update_delete(request, slug):
+@require_POST
+def build_update_delete(request, slug, id):
     project = get_object_or_404(Project, slug=slug, user=request.user)
-    build_update = get_object_or_404(BuildUpdate, project=project)
+    build_update = get_object_or_404(BuildUpdate, project=project, id=id)
     build_update.delete()
     messages.success(request, 'build update deleted succsessfully')
     return redirect(project.get_absolute_url())
@@ -263,3 +290,20 @@ def project_search(request, filtrate):
             'search_active': bool(query),
         }
     )
+
+@login_required
+@require_POST
+def project_star(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    profile = request.user.profile
+    if profile.projects_stars.filter(pk=project.pk).exists(): # type: ignore
+        project.stars -= int(1)
+        project.save()
+        profile.projects_stars.remove(project)
+        starred = False
+    else:
+        project.stars += int(1)
+        project.save()
+        profile.projects_stars.add(project)
+        starred = True
+    return JsonResponse({'stars': project.stars, 'starred': starred})

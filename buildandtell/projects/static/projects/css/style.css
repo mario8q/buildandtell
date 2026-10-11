@@ -15,23 +15,35 @@
   --surface-muted: #f6f8fa;
 
   /* Borders */
-  --border: #e2e6ec;
-  --border-strong: #c7cdd6;
+  --border: #f1cf96;
+  --border-strong: #f8e8cd;
 
   /* Text */
   --text: #1f2430;
   --text-muted: #59636e;
   --text-faint: #70797f;
 
-  /* Accent */
-  --accent: #4f6bf5;
-  --accent-strong: #3d54d6;
-  --accent-soft: #eef1fd;
+  /* Accent — Amber (50–950 scale) */
+  --accent-50: #fdf7ed;
+  --accent-100: #f1cf96;
+  --accent-200: #f1cf96;
+  --accent-300: #eab15f;
+  --accent: #e4973b;
+  --accent-500: #d87422;
+  --accent-strong: #c3581c;
+  --accent-700: #a23d1b;
+  --accent-800: #84311c;
+  --accent-900: #6d291a;
+  --accent-950: #3e130a;
+  --accent-soft: var(--accent-50);
+
+  /* Star */
+  --star: #e5a50a;
 
   /* Status */
-  --st-planning: #9a6700;
-  --st-planning-bg: #f6ecd4;
-  --st-planning-border: #e2cfa8;
+  --st-planning: #6d4bd8;
+  --st-planning-bg: #efeafd;
+  --st-planning-border: #d5c9f7;
   --st-in-progress: #1f6feb;
   --st-in-progress-bg: #dce9fd;
   --st-in-progress-border: #b8d2f8;
@@ -61,13 +73,13 @@
   --shadow-md: 0 4px 12px rgba(31, 35, 40, 0.08), 0 2px 4px rgba(31, 35, 40, 0.06);
 
   /* Focus */
-  --focus: rgba(79, 107, 245, 0.35);
+  --focus: rgba(228, 151, 59, 0.45);
 
   /* Typography */
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter,
+  --font: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", "Source Code Pro", Menlo,
-    Consolas, monospace;
+  --font-mono: "Reddit Mono", ui-monospace, "Cascadia Mono", "Source Code Pro",
+    Menlo, Consolas, monospace;
 }
 
 /* --------------------------------------------------------------------------
@@ -176,14 +188,18 @@ code {
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
   background: var(--accent);
-  color: #ffffff;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
+}
+
+.brand__mark-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand__amp {
@@ -542,7 +558,6 @@ code {
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     transform 0.15s ease;
@@ -639,15 +654,29 @@ code {
 .badge {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   flex-shrink: 0;
-  font-size: 0.7rem;
+  font-size: 0.71rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 3px 10px;
   border-radius: 999px;
   border: 1px solid;
   white-space: nowrap;
+}
+
+/* Status badges carry a colored dot so each state reads at a glance */
+.badge--PL::before,
+.badge--IN::before,
+.badge--CO::before,
+.badge--AR::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .badge--PL {
@@ -682,6 +711,18 @@ code {
   letter-spacing: 0.04em;
 }
 
+/* Update-type badges — one color per type for quick scanning */
+.badge--FE { color: #1f6feb; background: #dce9fd; border-color: #b8d2f8; } /* Feature */
+.badge--BU { color: #d1242f; background: #fbecec; border-color: #efc3c5; } /* Bug */
+.badge--FX { color: #0f766e; background: #d7f0ec; border-color: #a9ddd4; } /* Fix */
+.badge--IM { color: #6d4bd8; background: #efeafd; border-color: #d5c9f7; } /* Improvement */
+.badge--LE { color: #9a6700; background: #f6ecd4; border-color: #e2cfa8; } /* Learning */
+.badge--AR { color: #4338ca; background: #e6e6fb; border-color: #c7c6f4; } /* Architecture */
+.badge--EX { color: #b83280; background: #fbe7f3; border-color: #f0c3e0; } /* Experiment */
+.badge--MI { color: #ffffff; background: var(--accent); border-color: var(--accent-strong); } /* Milestone */
+.badge--GH { color: #24292f; background: #e6e9ec; border-color: #c9ced6; } /* Github commit */
+.badge--NO { color: #6b7280; background: #eef1f4; border-color: #d3d8de; } /* Note */
+
 /* --------------------------------------------------------------------------
    Breadcrumb
    -------------------------------------------------------------------------- */
@@ -710,7 +751,7 @@ code {
 
 .project-hero__title {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
@@ -718,11 +759,61 @@ code {
 
 .project-hero__title h1 {
   margin: 0;
+  margin-right: auto;
   font-size: 2.1rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
   word-break: break-word;
+}
+
+/* Star toggle (filled when starred, outline when not) */
+.star-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.star-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-faint);
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.star-button::before {
+  content: "\2606";
+  font-size: 2rem;
+}
+
+.star-button:hover {
+  color: var(--star);
+  transform: translateY(-1px);
+}
+
+.star-button.is-starred {
+  color: var(--star);
+}
+
+.star-button.is-starred::before {
+  content: "\2605";
+}
+
+.stars-count {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.98rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .project-hero__meta {
@@ -777,7 +868,6 @@ code {
 .meta-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -1115,21 +1205,68 @@ code {
 .timeline__item::before {
   content: "";
   position: absolute;
-  left: 1px;
-  top: 6px;
-  width: 10px;
-  height: 10px;
+  left: 0;
+  top: 5px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease,
-    transform 0.2s ease;
+  background: var(--accent);
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    filter 0.2s ease;
 }
 
 .timeline__item:hover::before {
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-soft);
-  transform: scale(1.1);
+  background: var(--accent-strong);
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 3px var(--accent-soft));
+}
+
+/* Timeline marker shape per update type */
+.timeline__item--FE::before { border-radius: 2px; }
+.timeline__item--BU::before { border-radius: 50%; }
+.timeline__item--FX::before {
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--surface);
+}
+.timeline__item--IM::before { border-radius: 40%; }
+.timeline__item--LE::before {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.timeline__item--AR::before {
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+.timeline__item--EX::before {
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.timeline__item--MI::before {
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.timeline__item--GH::before {
+  clip-path: polygon(35% 0, 65% 0, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0 65%, 0 35%, 35% 35%);
+}
+.timeline__item--NO::before {
+  left: 3px;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* Milestone updates: a line before and after sets the huge update apart */
+.timeline__item--MI {
+  border-top: 1px solid var(--accent-200);
+  border-bottom: 1px solid var(--accent-200);
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+.timeline__item--MI::before {
+  top: 28px;
+}
+
+.timeline__item--MI .update {
+  background: var(--accent-soft);
+  border-bottom: none;
 }
 
 .update {
@@ -1237,7 +1374,7 @@ a.tag:hover {
   color: #fff;
 }
 
-/* Technology chips (visually distinct from tags) */
+/* Technology chips (code-token look, distinct from accent tag pills) */
 .tech-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1247,24 +1384,24 @@ a.tag:hover {
 .tech-chip {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 3px 10px;
-  border: 1px solid var(--success-border);
+  gap: 6px;
+  padding: 3px 10px 3px 9px;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background: var(--success-bg);
-  color: var(--success);
+  background: var(--bg-soft);
+  color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 500;
   white-space: nowrap;
 }
 
 .tech-chip::before {
-  content: "";
-  flex-shrink: 0;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--success);
+  content: "</>";
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  color: var(--accent);
 }
 
 .card__tags {
@@ -1326,6 +1463,7 @@ a.tag:hover {
 
 .search-bar__input {
   flex: 1 1 auto;
+  border-radius: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -1504,7 +1642,32 @@ select.input {
   cursor: pointer;
 }
 
+/* Native date/time pickers: app accent + font (browser default is blue) */
+input[type="date"].input,
+input[type="time"].input,
+input[type="datetime-local"].input {
+  accent-color: var(--accent);
+  font-family: var(--font);
+}
+
+input[type="date"].input::-webkit-calendar-picker-indicator,
+input[type="time"].input::-webkit-calendar-picker-indicator,
+input[type="datetime-local"].input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
 /* Tom Select (searchable multi-select) */
+/* Tom Select copies the element's classes onto its wrapper div, so strip the
+   .input box styling from the wrapper — the .ts-control is the single cell. */
+.ts-wrapper.input,
+.ts-wrapper.tom-select {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
 .ts-wrapper.single .ts-control,
 .ts-wrapper.multi .ts-control {
   min-height: 42px;
@@ -1809,12 +1972,12 @@ input.input--file::-webkit-file-upload-button:hover {
    Dashboard (landing page)
    -------------------------------------------------------------------------- */
 .dash-hero {
-  background: #4f6bf5;
+  background: #c3581c;
   background: linear-gradient(
     90deg,
-    rgba(79, 107, 245, 1) 0%,
-    rgba(61, 84, 214, 1) 50%,
-    rgba(238, 241, 253, 1) 100%
+    rgba(195, 88, 28, 1) 0%,
+    rgba(228, 151, 59, 1) 50%,
+    rgba(241, 207, 150, 1) 100%
   );
   color: #ffffff;
   padding: 72px 0 80px;

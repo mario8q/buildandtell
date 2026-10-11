@@ -19,6 +19,11 @@ urlpatterns = [
     # Crud build update
     path('<slug:slug>/build-update/create/', views.build_update_create, name='build_update_create'),
     path('<slug:slug>/build-update/<int:id>/edit/', views.build_update_edit, name='build_update_edit'),
-    path('<slug:slug>/build-update/delete/', views.build_update_delete, name='build_update_delete'),
+    path('<slug:slug>/build-update/<int:id>/delete/', views.build_update_delete, name='build_update_delete'),
+    # Sync build updates with github
+    path('<slug:slug>/build-update/sync-github-commits/', views.build_update_sync_with_github, name='build_update_sync_with_github'),
+    # Project star
+    path('star/<slug:slug>/', views.project_star, name='project_star'),
+    # Project detail
     path('<slug:slug>/', views.project_detail, name='project_detail'),
 ]

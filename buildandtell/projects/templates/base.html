@@ -6,9 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Build&Tell — document your projects as you build them.">
-    <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=19">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'projects/css/tom-select.css' %}">
+    <link rel="stylesheet" href="{% static 'projects/css/style.css' %}?v=34">
     <title>{% block title %}Build&Tell{% endblock title %}</title>
     {% block extra_head %}{% endblock extra_head %}
 </head>
@@ -16,7 +23,9 @@
     <header class="site-header">
         <div class="container site-header__inner">
             <a class="brand" href="{% url 'dashboard' %}">
-                <span class="brand__mark">B&amp;T</span>
+                <span class="brand__mark">
+                    <img class="brand__mark-img" src="{% static 'favicon/android-chrome-192x192.png' %}" alt="Build&amp;Tell">
+                </span>
                 <span class="brand__name">Build<span class="brand__amp">&amp;</span>Tell</span>
             </a>
             <nav class="site-nav" aria-label="Primary">
@@ -92,6 +101,14 @@
                 plugins: ['remove_button', 'clear_button', 'dropdown_input'],
                 maxOptions: 10000,
             });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.8/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            {% block domready %}
+            {% endblock domready %}
         });
     </script>
 </body>

@@ -9,7 +9,7 @@ class TechnologyAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['user', 'title', 'slug', 'status', 'repo_url', 'website_url', 'created', 'updated']
+    list_display = ['user', 'title', 'slug', 'status', 'stars', 'repo_url', 'website_url', 'created', 'updated']
     list_filter = ['created']
     search_fields = ['title', 'description']
 

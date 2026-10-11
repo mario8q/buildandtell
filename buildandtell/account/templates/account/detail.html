@@ -155,7 +155,7 @@
                 </div>
             </aside>
         </div>
-
+        <br>
         <section class="section" aria-label="Recent activity">
             <header class="section__head">
                 <h2>Recent activity</h2>
@@ -165,14 +165,14 @@
             {% if recent_updates %}
                 <ol class="timeline">
                     {% for update in recent_updates %}
-                        <li class="timeline__item">
+                        <li class="timeline__item timeline__item--{{ update.type }}">
                             <article class="update">
                                 <header class="update__head">
                                     <div class="update__title">
                                         <h3>{{ update.title }}</h3>
                                         <span class="update__project">in <a href="{{ update.project.get_absolute_url }}">{{ update.project.title }}</a></span>
                                     </div>
-                                    <span class="badge badge--type">{{ update.get_type_display }}</span>
+                                    <span class="badge badge--type badge--{{ update.type }}">{{ update.get_type_display }}</span>
                                 </header>
                                 <div class="update__body">{{ update.body|linebreaks|truncatewords_html:70 }}</div>
                                 <footer class="update__meta">

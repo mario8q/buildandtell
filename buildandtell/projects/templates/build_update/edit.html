@@ -44,7 +44,7 @@
 
             <div class="form__divider">Danger zone</div>
 
-            <form class="form delete-form" method="post" action="{% url 'projects:build_update_delete' project.slug %}">
+            <form class="form delete-form" method="post" action="{% url 'projects:build_update_delete' project.slug build_update_id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn--danger">Delete this update</button>
             </form>

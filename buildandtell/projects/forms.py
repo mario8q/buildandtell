@@ -1,3 +1,4 @@
+import re
 from django import forms
 from taggit.forms import TagWidget
 from .models import Project, BuildUpdate
@@ -29,6 +30,7 @@ class CreateProjectForm(forms.ModelForm):
             'tags': TagWidget(attrs={
                 'class': 'input',
                 'placeholder': 'python, django, api',
+                'help_text': 'separate tags with commas',
             }),
             'image': forms.ClearableFileInput(attrs={
                 'class': 'input input--file',
@@ -53,7 +55,7 @@ class CreateProjectForm(forms.ModelForm):
 class CreateBuildUpdateForm(forms.ModelForm):
     class Meta:
         model = BuildUpdate
-        fields = ['title', 'type', 'body']
+        fields = ['title', 'type', 'body', 'created']
         labels = {
             'title': 'title',
             'type': 'type',
@@ -70,7 +72,22 @@ class CreateBuildUpdateForm(forms.ModelForm):
                 'rows': 7,
                 'placeholder': 'What did you ship, learn, or change?',
             }),
+            'created': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'class': 'input',
+            })
         }
 
 class SearchProjectForm(forms.Form):
     query = forms.CharField(max_length=255)
+
+class SyncBuildUpdateForm(forms.Form):
+    url = forms.URLField(widget=forms.HiddenInput)
+    def clean_url(self):
+        url = self.cleaned_data['url']
+        pattern = r'^https?://github\.com/([^/]+)/([^/]+)/?$'
+        owner = re.match(pattern, url).group(1) # type: ignore
+        repo = re.match(pattern, url).group(2) # type: ignore
+        self.cleaned_data['owner'] = owner
+        self.cleaned_data['repo'] = repo
+        return url
