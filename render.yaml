@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: buildandtell
+    runtime: python
+    plan: free
+    rootDir: buildandtell
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn buildandtell.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.7"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://buildandtell.onrender.com"
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_SSLMODE
+        value: "require"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: GOOGLE_OAUTH2_KEY
+        sync: false
+      - key: GOOGLE_OAUTH2_SECRET
+        sync: false
+      - key: AUTH_GITHUB_KEY
+        sync: false
+      - key: AUTH_GITHUB_SECRET
+        sync: false
