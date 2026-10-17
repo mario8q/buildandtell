@@ -41,11 +41,6 @@
                         My Projects
                     </a>
                 {% endif %}
-                <a class="site-nav__link{% if request.path|slice:':6' == '/admin' %} site-nav__link--active{% endif %}"
-                   href="/admin/"
-                   {% if request.path|slice:':6' == '/admin' %}aria-current="page"{% endif %}>
-                    Admin
-                </a>
                 {% if request.user.is_authenticated %}
                     <span class="site-nav__divider" aria-hidden="true"></span>
                     <a class="user-chip" href="{{ request.user.profile.get_absolute_url }}" title="Profile">
