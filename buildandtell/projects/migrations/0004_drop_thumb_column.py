@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            sql='ALTER TABLE projects_project DROP COLUMN thumb;',
-            reverse_sql="ALTER TABLE projects_project ADD COLUMN thumb varchar(100) NOT NULL DEFAULT '';",
+            sql='ALTER TABLE projects_project DROP COLUMN IF EXISTS thumb;',
+            reverse_sql="ALTER TABLE projects_project ADD COLUMN IF NOT EXISTS thumb varchar(100) NOT NULL DEFAULT '';",
         ),
     ]
