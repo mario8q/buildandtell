@@ -100,6 +100,7 @@ class BuildUpdate(models.Model):
         default=UpdateType.NOTE
     )
     body = models.TextField()
+    commit_sha = models.CharField(max_length=40, blank=True, null=True)
     created = models.DateTimeField()
     updated = models.DateTimeField(auto_now=True)
 
@@ -108,6 +109,13 @@ class BuildUpdate(models.Model):
             models.Index(fields=['-created'])
         ]
         ordering = ['-created']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['project', 'commit_sha'],
+                condition=models.Q(commit_sha__isnull=False),
+                name='uniq_project_commit_sha',
+            )
+        ]
 
     def __str__(self):
         return f'{self.title} build update'

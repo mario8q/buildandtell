@@ -187,8 +187,11 @@ def build_update_sync_with_github(request, slug):
         owner = form.cleaned_data['owner']
         repo = form.cleaned_data['repo']
         commits_list = fetch_github_commits(owner, repo)
-        create_build_updates_from(commits_list, owner, repo, project)
-        messages.success(request, 'build update(s) created succsessfully from github commits')
+        created_count, updated_count = create_build_updates_from(commits_list, owner, repo, project)
+        messages.success(
+            request,
+            f'{created_count} build update(s) created and {updated_count} updated from github commits',
+        )
     else:
         messages.error(request, 'there was an error with the sync')
     return redirect('projects:project_detail', slug=project.slug)
