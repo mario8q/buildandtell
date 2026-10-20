@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django_extensions',
     'social_django', 
-    'easy_thumbnails',
+    'cloudinary',
     'taggit',
     'projects.apps.ProjectsConfig'
 ]

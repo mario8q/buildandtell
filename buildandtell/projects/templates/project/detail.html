@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load thumbnail %}
+{% load image_tags %}
 
 {% block title %}{{ project.title }} · Build&Tell{% endblock title %}
 
@@ -43,7 +43,7 @@
             <aside class="detail-side">
                 <div class="meta-card">
                     <div class="meta-card__media{% if not project.image %} meta-card__media--placeholder{% endif %}">
-                        <img src="{% if project.image %}{% thumbnail project.image 380x240 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
+                        <img src="{% if project.image %}{% image_thumb project.image 380 240 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
                     </div>
                     <div class="meta-card__head">
                         <h3>Metadata</h3>

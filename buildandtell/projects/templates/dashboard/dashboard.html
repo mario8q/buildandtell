@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load thumbnail %}
+{% load image_tags %}
 
 {% block title %}Build&Tell — build it, tell the story{% endblock title %}
 
@@ -125,7 +125,7 @@
                             {% for project in recent_projects %}
                                 <a class="live-row" href="{{ project.get_absolute_url }}">
                                     <img class="live-row__thumb"
-                                            src="{% if project.image %}{% thumbnail project.image 112x112 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}"
+                                            src="{% if project.image %}{% image_thumb project.image 112 112 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}"
                                             alt="{{ project.title }}">
                                     <span class="live-row__text">
                                         <span class="live-row__title">{{ project.title }}</span>

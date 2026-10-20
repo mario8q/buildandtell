@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load thumbnail %}
+{% load image_tags %}
 
 {% block title %}{{ user.get_full_name|default:user.username }} · Build&Tell{% endblock title %}
 
@@ -14,7 +14,7 @@
             <div class="profile-hero__identity">
                 {% if profile.image %}
                     <img class="profile-hero__avatar"
-                         src="{% thumbnail profile.image 160x160 crop='smart' quality=90 %}"
+                         src="{% image_thumb profile.image 160 160 %}"
                          alt="{{ user.username }}">
                 {% else %}
                     <span class="profile-hero__avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
@@ -78,7 +78,7 @@
                             {% for project in projects %}
                                 <article class="card">
                                     <a class="card__media" href="{{ project.get_absolute_url }}">
-                                        <img src="{% if project.image %}{% thumbnail project.image 640x360 crop='smart' quality=90 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
+                                        <img src="{% if project.image %}{% image_thumb project.image 640 360 %}{% else %}{% static 'projects/img/'|add:project.default_image|add:'.jpg' %}{% endif %}" alt="{{ project.title }}">
                                     </a>
                                     <div class="card__body">
                                         <div class="card__top">

@@ -1,5 +1,5 @@
 {% load static %}
-{% load thumbnail %}
+{% load image_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +46,7 @@
                     <a class="user-chip" href="{{ request.user.profile.get_absolute_url }}" title="Profile">
                         {% if request.user.profile.image %}
                             <img class="user-chip__avatar"
-                                 src="{% thumbnail request.user.profile.image 32x32 crop='smart' quality=90 %}"
+                                 src="{% image_thumb request.user.profile.image 32 32 %}"
                                  alt="">
                         {% else %}
                             <span class="user-chip__avatar" aria-hidden="true">{{ request.user.username|slice:":1"|upper }}</span>
