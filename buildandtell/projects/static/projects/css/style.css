@@ -65,8 +65,6 @@
 
   /* Shape */
   --radius: 8px;
-  --radius-sm: 6px;
-  --radius-lg: 12px;
 
   /* Elevation */
   --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.06), 0 1px 3px rgba(31, 35, 40, 0.08);
@@ -216,7 +214,6 @@ code {
   display: inline-flex;
   align-items: center;
   padding: 7px 12px;
-  border-radius: var(--radius-sm);
   color: var(--text-muted);
   font-weight: 500;
   font-size: 0.9rem;
@@ -254,7 +251,7 @@ code {
   justify-content: center;
   margin-left: 4px;
   padding: 7px 14px;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   background: var(--accent);
   color: #ffffff;
   font-weight: 600;
@@ -324,7 +321,7 @@ code {
   background: transparent;
   border: none;
   padding: 8px 10px;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
 }
@@ -495,7 +492,7 @@ code {
   font-size: 0.88rem;
   line-height: 1.2;
   padding: 9px 16px;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
@@ -782,7 +779,7 @@ code {
   height: 40px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   background: transparent;
   color: var(--text-faint);
   line-height: 1;
@@ -1072,7 +1069,6 @@ code {
   gap: 1px;
   margin-bottom: 32px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--border);
 }
@@ -1274,7 +1270,6 @@ code {
   flex-direction: column;
   gap: 8px;
   padding: 12px 16px;
-  border-radius: var(--radius-lg);
   border-bottom: 1px solid var(--border);
   transition: background-color 0.25s ease, box-shadow 0.25s ease,
     border-color 0.25s ease, transform 0.25s ease;
@@ -1330,7 +1325,6 @@ code {
   text-align: center;
   padding: 40px 24px;
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-lg);
   color: var(--text-muted);
 }
 
@@ -1342,7 +1336,6 @@ code {
   text-align: center;
   padding: 64px 24px;
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-lg);
   color: var(--text-muted);
 }
 
@@ -1461,7 +1454,7 @@ a.tag:hover {
   margin-top: 18px;
 }
 
-.search-bar__input {
+.search-bar .search-bar__input {
   flex: 1 1 auto;
   border-radius: 0;
 }
@@ -1511,7 +1504,6 @@ a.tag:hover {
 
 .form__errors .errorlist li {
   padding: 10px 14px;
-  border-radius: var(--radius-sm);
   border: 1px solid var(--danger-border);
   color: var(--danger);
   background: var(--danger-bg);
@@ -1573,7 +1565,6 @@ a.tag:hover {
 .form__current-image {
   width: 100%;
   max-width: 320px;
-  border-radius: var(--radius-sm);
   border: 1px solid var(--border-strong);
 }
 
@@ -1608,7 +1599,6 @@ a.tag:hover {
   box-sizing: border-box;
   background: var(--bg);
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
   padding: 10px 12px;
   color: var(--text);
   font-size: 0.92rem;
@@ -1723,7 +1713,7 @@ input.input--file::-webkit-file-upload-button {
   color: var(--accent);
   background: var(--accent-soft);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   padding: 6px 12px;
   margin-right: 10px;
   cursor: pointer;
@@ -1754,7 +1744,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 18px 22px 22px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
 }
 
 .form-pane__head {
@@ -1765,7 +1754,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-soft);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .form-pane__title {
@@ -1801,7 +1789,6 @@ input.input--file::-webkit-file-upload-button:hover {
 .auth__card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -1894,7 +1881,6 @@ input.input--file::-webkit-file-upload-button:hover {
   flex-direction: column;
   gap: 4px;
   padding: 14px 16px;
-  border-radius: var(--radius-sm);
   border: 1px solid;
 }
 
@@ -1928,7 +1914,7 @@ input.input--file::-webkit-file-upload-button:hover {
   width: 100%;
   margin-top: 10px;
   padding: 11px 14px;
-  border-radius: var(--radius);
+  border-radius: 0;
   border: 1px solid var(--border-strong);
   background: var(--surface);
   cursor: pointer;
@@ -1950,7 +1936,6 @@ input.input--file::-webkit-file-upload-button:hover {
   place-items: center;
   width: 24px;
   height: 24px;
-  border-radius: var(--radius-sm);
 }
 
 .btn-social--google .btn-social__glyph {
@@ -2075,7 +2060,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 16px 20px;
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: var(--radius-lg);
   box-shadow: 0 8px 24px rgba(20, 30, 80, 0.18);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -2140,7 +2124,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 24px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     transform 0.15s ease;
 }
@@ -2184,7 +2167,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 22px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     transform 0.15s ease;
 }
@@ -2200,7 +2182,6 @@ input.input--file::-webkit-file-upload-button:hover {
   place-items: center;
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-sm);
   background: var(--accent-soft);
   color: var(--accent);
   font-family: var(--font-mono);
@@ -2243,7 +2224,6 @@ input.input--file::-webkit-file-upload-button:hover {
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -2271,7 +2251,6 @@ input.input--file::-webkit-file-upload-button:hover {
   flex-shrink: 0;
   width: 56px;
   height: 56px;
-  border-radius: var(--radius-sm);
   object-fit: cover;
   background: var(--surface-muted);
   border: 1px solid var(--border-strong);
@@ -2313,7 +2292,6 @@ input.input--file::-webkit-file-upload-button:hover {
   padding: 56px 32px;
   background: var(--accent-soft);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
 }
 
 .dash-cta h2 {
