@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from projects.models import Project
+
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -21,6 +22,13 @@ class Profile(models.Model):
         related_name='users_stars',
         blank=True
     )
+
+    following = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        blank=True
+    )
+    followers = models.PositiveIntegerField(default=0)
 
     website = models.URLField(blank=True)
 

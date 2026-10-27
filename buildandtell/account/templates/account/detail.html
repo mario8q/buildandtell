@@ -19,6 +19,7 @@
                 {% else %}
                     <span class="profile-hero__avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
                 {% endif %}
+                
                 <div class="profile-hero__who">
                     <h1 class="profile-hero__name">{{ user.get_full_name|default:user.username }}</h1>
                     <span class="profile-hero__username">@{{ user.username }}</span>
@@ -43,6 +44,12 @@
                 {% if profile.github %}
                     <a class="btn btn--ghost" href="{{ profile.github }}" target="_blank" rel="noopener">GitHub</a>
                 {% endif %}
+                <span class="followers-group">
+                    <span class="followers">{{ profile.followers }} follower{{ profile.followers|pluralize }}</span>
+                    {% if request.user != user %}
+                        <button class="follow-button">{% if is_following %}unfollow{% else %}follow{% endif %}</button>
+                    {% endif %}
+                </span>
             </div>
         </header>
 
@@ -190,3 +197,27 @@
         </section>
     </div>
 {% endblock content %}
+
+{% block domready %}
+    const url = '{% url 'account:user_follow' user.username %}';
+    const followButton = document.querySelector('.follow-button');
+    if (followButton !== null){
+        followButton.addEventListener('click', function(e){
+            const options = {
+                headers: {'X-CSRFToken': csrftoken},
+                method: 'POST',
+                origin: 'same-origin'
+            };
+            fetch(url, options).then((response) => response.json()).then(data =>{
+                const action = data['action'];
+                const followers = data['followers'];
+                const followersCount = document.querySelector('.followers');
+
+                followersCount.innerHTML = `${followers} follower${followers === 1? '' : 's'}`
+                followButton.innerHTML = action === 'follow'? 'unfollow' : 'follow'
+
+            });
+            
+        });
+    };
+{% endblock domready %}

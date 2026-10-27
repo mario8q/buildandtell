@@ -59,7 +59,9 @@
                             {% endwith %}
                         </div>
                         <footer class="card__meta">
-                            <span>by {{ project.user.username }}</span>
+                            <a href="{{ project.user.profile.get_absolute_url }}">
+                                <span>by {{ project.user.username }}</span>
+                            </a>
                             <time datetime="{{ project.updated|date:'c' }}">Updated {{ project.updated|date:"M j, Y" }}</time>
                         </footer>
                     </article>

@@ -63,9 +63,6 @@
   --success-bg: #eaf7ed;
   --success-border: #b3ddc0;
 
-  /* Shape */
-  --radius: 8px;
-
   /* Elevation */
   --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.06), 0 1px 3px rgba(31, 35, 40, 0.08);
   --shadow-md: 0 4px 12px rgba(31, 35, 40, 0.08), 0 2px 4px rgba(31, 35, 40, 0.06);
@@ -126,7 +123,6 @@ code {
   color: var(--text-muted);
   background: var(--bg-soft);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
   padding: 0.1em 0.35em;
 }
 
@@ -361,7 +357,6 @@ code {
 
 .flash {
   padding: 10px 14px;
-  border-radius: var(--radius-sm);
   border: 1px solid;
   font-size: 0.88rem;
   background: var(--bg);
@@ -1062,6 +1057,57 @@ code {
   min-width: 180px;
 }
 
+.followers-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.followers {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.follow-button {
+  flex-shrink: 0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.follow-button:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.follow-button:active {
+  transform: translateY(1px);
+}
+
+.follow-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
 /* Stats strip */
 .stats {
   display: grid;
@@ -1380,7 +1426,6 @@ a.tag:hover {
   gap: 6px;
   padding: 3px 10px 3px 9px;
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
   background: var(--bg-soft);
   color: var(--text);
   font-family: var(--font-mono);
@@ -1661,7 +1706,7 @@ input[type="datetime-local"].input::-webkit-calendar-picker-indicator {
 .ts-wrapper.single .ts-control,
 .ts-wrapper.multi .ts-control {
   min-height: 42px;
-  border-radius: var(--radius);
+  border-radius: 0;
   border-color: var(--border-strong);
   background: var(--bg);
   color: var(--text);
@@ -1686,7 +1731,7 @@ input[type="datetime-local"].input::-webkit-calendar-picker-indicator {
 }
 
 .ts-dropdown {
-  border-radius: var(--radius);
+  border-radius: 0;
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
 }
