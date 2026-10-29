@@ -43,3 +43,17 @@ services:
         sync: false
       - key: AUTH_GITHUB_SECRET
         sync: false
+      - key: VOICE_CALLS_ENABLED
+        value: "True"
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_WEBHOOK_SECRET
+        sync: false
+      - key: ELEVENLABS_DEFAULT_VOICE_ID
+        value: "cjVigY5qzO86Huf0OWal"
+      - key: VOICE_MAX_CALL_SECONDS
+        value: "120"
+      - key: VOICE_DAILY_CALLS_PER_USER
+        value: "1"
+      - key: VOICE_MONTHLY_MINUTES
+        value: "15"

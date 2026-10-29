@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'social_django', 
     'cloudinary',
     'taggit',
-    'projects.apps.ProjectsConfig'
+    'projects.apps.ProjectsConfig',
+    'voice.apps.VoiceConfig',
 ]
 
 if DEBUG:
@@ -229,6 +230,58 @@ LOGIN_REDIRECT_URL = '/'
 
 # Taggit parser
 TAGGIT_TAGS_FROM_STRING = "projects.tagutils.parse_tags"
+
+
+# Voice AI (ElevenAgents)
+VOICE_CALLS_ENABLED = config('VOICE_CALLS_ENABLED', default=False, cast=bool)
+ELEVENLABS_API_KEY = config('ELEVENLABS_API_KEY', default='')
+ELEVENLABS_API_BASE = config(
+    'ELEVENLABS_API_BASE',
+    default='https://api.elevenlabs.io/v1',
+)
+ELEVENLABS_DEFAULT_VOICE_ID = config(
+    'ELEVENLABS_DEFAULT_VOICE_ID',
+    default='cjVigY5qzO86Huf0OWal',
+)
+ELEVENLABS_TTS_MODEL_EN = config(
+    'ELEVENLABS_TTS_MODEL_EN',
+    default='eleven_turbo_v2',
+)
+ELEVENLABS_TTS_MODEL_ES = config(
+    'ELEVENLABS_TTS_MODEL_ES',
+    default='eleven_turbo_v2_5',
+)
+ELEVENLABS_AGENT_LLM = config('ELEVENLABS_AGENT_LLM', default='')
+ELEVENLABS_WEBHOOK_SECRET = config('ELEVENLABS_WEBHOOK_SECRET', default='')
+
+VOICE_MONTHLY_MINUTES = config('VOICE_MONTHLY_MINUTES', default=15, cast=int)
+VOICE_MAX_CALL_SECONDS = config('VOICE_MAX_CALL_SECONDS', default=120, cast=int)
+VOICE_DAILY_CALLS_PER_USER = config(
+    'VOICE_DAILY_CALLS_PER_USER',
+    default=1,
+    cast=int,
+)
+VOICE_STALE_GRACE_SECONDS = config(
+    'VOICE_STALE_GRACE_SECONDS',
+    default=300,
+    cast=int,
+)
+
+VOICE_CONTEXT_MAX_PROJECTS = config(
+    'VOICE_CONTEXT_MAX_PROJECTS',
+    default=12,
+    cast=int,
+)
+VOICE_CONTEXT_MAX_UPDATES = config(
+    'VOICE_CONTEXT_MAX_UPDATES',
+    default=20,
+    cast=int,
+)
+VOICE_CONTEXT_MAX_CHARS = config(
+    'VOICE_CONTEXT_MAX_CHARS',
+    default=7000,
+    cast=int,
+)
 
 
 # Production security (Render terminates TLS at its proxy)

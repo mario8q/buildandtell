@@ -13,6 +13,7 @@
                 {% include 'project/search.html' with search_action='projects:project_search' %}
                 <p class="page-head__meta">
                     {{ projects|length }} project{{ projects|length|pluralize }}
+                    <a href="{% url 'projects:project_list' %}?search_filter=most_liked">Most liked projects</a>
                     {% if query %}
                         · <a class="link-inline" href="{% url 'projects:project_list' %}">show all projects</a>
                     {% elif tag %}

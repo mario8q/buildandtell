@@ -1,0 +1,372 @@
+/* --------------------------------------------------------------------------
+   Voice AI
+   -------------------------------------------------------------------------- */
+
+.voice-settings__notice {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--accent-50);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.voice-settings__notice strong {
+  color: var(--text);
+}
+
+.voice-settings__notice--warning {
+  border-left-color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+}
+
+.voice-settings__card {
+  margin-top: 28px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.voice-settings__card-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.voice-settings__card-body {
+  padding: 4px 16px;
+}
+
+.voice-settings__agent {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.voice-settings__agent:last-child {
+  border-bottom: 0;
+}
+
+.voice-settings__agent-name {
+  font-weight: 600;
+}
+
+.voice-settings__agent-meta {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  overflow-wrap: anywhere;
+}
+
+.voice-settings__error {
+  margin-top: 6px;
+  color: var(--danger);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.voice-settings__remove {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.voice-settings__remove .form__hint {
+  max-width: 58ch;
+}
+
+.checkbox,
+input[type="checkbox"].checkbox {
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.form__field--checkbox .form__field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Call dialog
+   -------------------------------------------------------------------------- */
+
+.voice-dialog {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.voice-dialog::backdrop {
+  background: rgba(31, 36, 48, 0.48);
+}
+
+.voice-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.voice-dialog__identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.voice-dialog__avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.voice-dialog__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.voice-dialog__subtitle {
+  margin: 3px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+
+.voice-dialog__close {
+  margin-left: auto;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.voice-dialog__close:hover {
+  color: var(--accent);
+}
+
+.voice-dialog__body {
+  padding: 18px 20px 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 140px);
+}
+
+.voice-dialog__notice {
+  margin: 0 0 16px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  background: var(--accent-50);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.voice-dialog__lang {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.voice-dialog__lang legend {
+  padding: 0;
+  margin-bottom: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.voice-dialog__lang-options {
+  display: flex;
+  gap: 8px;
+}
+
+.voice-dialog__lang-option {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease,
+    background 0.15s ease;
+}
+
+.voice-dialog__lang-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-50);
+  color: var(--accent-strong);
+}
+
+.voice-dialog__lang-option input {
+  accent-color: var(--accent);
+  margin: 0;
+}
+
+.voice-dialog__live {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.voice-dialog__status-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 24px;
+}
+
+.voice-dialog__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.voice-dialog__dot.is-connecting {
+  background: var(--accent);
+}
+
+.voice-dialog__dot.is-live {
+  background: var(--success);
+}
+
+.voice-dialog__dot.is-speaking {
+  background: var(--accent);
+}
+
+.voice-dialog__dot.is-error {
+  background: var(--danger);
+}
+
+.voice-dialog__status {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+.voice-dialog__timer {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.voice-dialog__captions {
+  min-height: 86px;
+  max-height: 180px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  overflow-y: auto;
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+.voice-dialog__captions-empty {
+  margin: 0;
+  color: var(--text-faint);
+}
+
+.voice-dialog__caption {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+}
+
+.voice-dialog__caption:last-child {
+  margin-bottom: 0;
+}
+
+.voice-dialog__caption-speaker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-right: 6px;
+  text-transform: uppercase;
+}
+
+.voice-dialog__caption--ai .voice-dialog__caption-speaker {
+  color: var(--accent-strong);
+}
+
+.voice-dialog__error {
+  margin: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--danger-border);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 0.8rem;
+}
+
+.voice-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.voice-dialog__actions .btn {
+  flex: 1 1 auto;
+}
+
+.voice-dialog__mic-note {
+  margin: 12px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+@media (max-width: 420px) {
+  .voice-dialog__body {
+    padding: 16px;
+  }
+
+  .voice-dialog__head {
+    padding: 16px;
+  }
+
+  .voice-dialog__actions {
+    flex-direction: column;
+  }
+}

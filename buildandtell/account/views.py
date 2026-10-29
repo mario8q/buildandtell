@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -9,6 +10,8 @@ from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from projects.models import BuildUpdate
+from voice.models import VoiceProfile
+from voice.services.budget import max_call_seconds
 
 def register(request):
     if request.method == 'POST':
@@ -48,6 +51,15 @@ def user_detail(request, username):
         current_profile = request.user.profile
         if current_profile.following.filter(pk=profile.pk).exists():
             is_following = True
+
+    voice_profile = VoiceProfile.objects.filter(user=user).first()
+    can_call_voice = bool(
+        settings.VOICE_CALLS_ENABLED
+        and request.user.is_authenticated
+        and request.user.pk != user.pk
+        and voice_profile is not None
+        and voice_profile.enabled
+    )
     return render(
         request,
         'account/detail.html',
@@ -59,6 +71,14 @@ def user_detail(request, username):
             'recent_updates': recent_updates,
             'update_count': update_count,
             'is_following': is_following,
+            'voice_profile': voice_profile,
+            'can_call_voice': can_call_voice,
+            'voice_default_language': (
+                voice_profile.default_language
+                if voice_profile is not None
+                else VoiceProfile.Language.EN
+            ),
+            'voice_max_seconds': max_call_seconds(),
         }
     )
 

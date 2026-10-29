@@ -14,6 +14,7 @@
                 <p class="page-head__meta">
                     {{ projects|length }} project{{ projects|length|pluralize }}
                     {% if update_count %} · {{ update_count }} build update{{ update_count|pluralize }}{% endif %}
+                    <a href="{% url 'projects:project_user_list' username %}?search_filter=most_liked">My most liked projects</a>
                     {% if query %}
                         · <a class="link-inline" href="{% url 'projects:project_user_list' username %}">show all my projects</a>
                     {% elif tag %}

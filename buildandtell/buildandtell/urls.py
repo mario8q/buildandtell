@@ -27,6 +27,7 @@ urlpatterns = [
     path('account/', include('django.contrib.auth.urls')),
     path('account/', include('account.urls')),
     path('projects/', include('projects.urls')),
+    path('voice/', include('voice.urls')),
 ]
 
 if settings.DEBUG:

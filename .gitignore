@@ -44,5 +44,6 @@ staticfiles/
 .vscode/
 Thumbs.db
 .DS_Store
+.buildandtell/CLAUDE.md
 
 buildandtell/.opencode

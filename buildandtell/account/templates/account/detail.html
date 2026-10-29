@@ -2,6 +2,13 @@
 {% load static %}
 {% load image_tags %}
 
+{% block extra_head %}
+    {% if can_call_voice %}
+        <link rel="stylesheet" href="{% static 'voice/css/voice.css' %}?v=1">
+        <script src="{% static 'voice/js/voice-call.js' %}?v=1" defer></script>
+    {% endif %}
+{% endblock extra_head %}
+
 {% block title %}{{ user.get_full_name|default:user.username }} · Build&Tell{% endblock title %}
 
 {% block content %}
@@ -37,6 +44,12 @@
             <div class="profile-hero__actions">
                 {% if request.user == user %}
                     <a class="btn btn--primary" href="{% url 'account:edit_profile' %}">Edit profile</a>
+                    <a class="btn btn--ghost" href="{% url 'voice:settings' %}">AI voice settings</a>
+                {% endif %}
+                {% if can_call_voice %}
+                    <button class="btn btn--primary" type="button" data-voice-open aria-haspopup="dialog">
+                        Call AI
+                    </button>
                 {% endif %}
                 {% if profile.website %}
                     <a class="btn btn--ghost" href="{{ profile.website }}" target="_blank" rel="noopener">Website</a>
@@ -196,6 +209,10 @@
             {% endif %}
         </section>
     </div>
+
+    {% if can_call_voice %}
+        {% include 'voice/call_dialog.html' %}
+    {% endif %}
 {% endblock content %}
 
 {% block domready %}

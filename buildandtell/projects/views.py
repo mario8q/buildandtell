@@ -43,6 +43,10 @@ def project_list(request, tag_slug = None):
         list_projects = Project.objects.exclude(user=request.user, status=Project.Status.ARCHIVED)
     else:
         list_projects = Project.objects.all()
+    search_filter = request.GET.get('search_filter')
+    if search_filter:
+        if search_filter == 'most_liked':
+            list_projects = list_projects.filter(stars__gt=0).order_by('-stars')
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         list_projects = list_projects.filter(tags__in=[tag])
@@ -58,7 +62,7 @@ def project_list(request, tag_slug = None):
     return render(
         request,
         'project/list.html',
-        {'projects': projects, 'tag': tag, 'all_tags': all_tags}
+        {'projects': projects, 'tag': tag, 'search_filter': search_filter, 'all_tags': all_tags}
     )
 
 @login_required
@@ -66,6 +70,10 @@ def project_user_list(request, username, tag_slug = None):
     tag = None
     list_projects = Project.objects.filter(user=request.user)
     all_user_tags = Project.tags.most_common(extra_filters={"project__user": request.user})
+    search_filter = request.GET.get('search_filter')
+    if search_filter:
+        if search_filter == 'most_liked':
+            list_projects = list_projects.filter(stars__gt=0).order_by('-stars')
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         list_projects = list_projects.filter(tags__in=[tag])

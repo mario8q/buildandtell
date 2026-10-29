@@ -1,0 +1,77 @@
+{% load static %}
+{% load image_tags %}
+
+<dialog
+    class="voice-dialog"
+    id="voice-call-dialog"
+    data-token-url="{% url 'voice:call_token' user.username %}"
+    data-vendor-src="{% static 'voice/js/vendor/elevenlabs-client-1.32.0.iife.js' %}"
+    data-max-seconds="{{ voice_max_seconds }}"
+    aria-labelledby="voice-call-title"
+>
+    <header class="voice-dialog__head">
+        <div class="voice-dialog__identity">
+            {% if profile.image %}
+                <img class="voice-dialog__avatar"
+                     src="{% image_thumb profile.image 96 96 %}"
+                     alt="">
+            {% else %}
+                <span class="voice-dialog__avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+            {% endif %}
+            <div>
+                <h2 class="voice-dialog__title" id="voice-call-title">
+                    Call {{ user.get_full_name|default:user.username }}'s AI
+                </h2>
+                <p class="voice-dialog__subtitle">AI representative · not the real person</p>
+            </div>
+        </div>
+        <button type="button" class="voice-dialog__close" data-voice-close aria-label="Close call dialog">&times;</button>
+    </header>
+
+    <div class="voice-dialog__body">
+        <p class="voice-dialog__notice">
+            Demo call · up to {{ voice_max_seconds }} seconds.
+            Shared voice minutes are limited, and the live transcript is not saved.
+        </p>
+
+        <fieldset class="voice-dialog__lang">
+            <legend>Language</legend>
+            <div class="voice-dialog__lang-options">
+                <label class="voice-dialog__lang-option">
+                    <input type="radio" name="voice-language" value="en"
+                           {% if voice_default_language == 'en' %}checked{% endif %}>
+                    <span>English</span>
+                </label>
+                <label class="voice-dialog__lang-option">
+                    <input type="radio" name="voice-language" value="es"
+                           {% if voice_default_language == 'es' %}checked{% endif %}>
+                    <span>Español</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <div class="voice-dialog__live">
+            <div class="voice-dialog__status-line">
+                <span class="voice-dialog__dot" data-voice-dot></span>
+                <span class="voice-dialog__status" data-voice-status>Ready to call</span>
+                <span class="voice-dialog__timer" data-voice-timer>--:--</span>
+            </div>
+            <div class="voice-dialog__captions" data-voice-captions aria-live="polite" aria-label="Live transcript">
+                <p class="voice-dialog__captions-empty" data-voice-empty>
+                    The live transcript appears here during the call. It is not stored.
+                </p>
+            </div>
+            <p class="voice-dialog__error" data-voice-error hidden></p>
+        </div>
+
+        <div class="voice-dialog__actions">
+            <button type="button" class="btn btn--primary" data-voice-start>Start call</button>
+            <button type="button" class="btn btn--ghost" data-voice-mute hidden>Mute</button>
+            <button type="button" class="btn btn--danger" data-voice-end hidden>End call</button>
+            <button type="button" class="btn btn--ghost" data-voice-close>Close</button>
+        </div>
+        <p class="voice-dialog__mic-note">
+            Your microphone is used only while the call is active.
+        </p>
+    </div>
+</dialog>

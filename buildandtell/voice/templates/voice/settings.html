@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI voice · Build&Tell{% endblock title %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'voice/css/voice.css' %}?v=1">
+{% endblock extra_head %}
+
+{% block content %}
+    <div class="container page">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ request.user.profile.get_absolute_url }}">&larr; My profile</a>
+        </nav>
+
+        <div class="create">
+            <header class="create__head">
+                <h1 class="create__title">AI voice representative</h1>
+                <p class="create__sub">
+                    Let other builders call an AI that answers questions about your public projects.
+                </p>
+            </header>
+
+            <div class="voice-settings__notice">
+                <strong>Demo voice, not a clone.</strong>
+                Calls use a shared voice and a limited monthly minute budget.
+                Transcripts are not saved.
+            </div>
+
+            {% if not voice_calls_enabled %}
+                <div class="voice-settings__notice voice-settings__notice--warning">
+                    AI calls are currently disabled for this site. Your settings are saved,
+                    but callers cannot start a call yet.
+                </div>
+            {% endif %}
+
+            <form class="form" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form__errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form__field{% if field.name == 'enabled' %} form__field--checkbox{% endif %}">
+                        <label class="form__field-label" for="{{ field.id_for_label }}">
+                            {{ field }}{{ field.label }}
+                        </label>
+                        {% if field.help_text %}
+                            <p class="form__hint">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="form__field-errors">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <p class="form__hint">
+                    Each call is capped at {{ max_call_seconds }} seconds.
+                    Shared demo budget remaining: {{ remaining_seconds }} seconds.
+                </p>
+
+                <div class="form__actions">
+                    <button type="submit" class="btn btn--primary">Save settings</button>
+                    <a class="btn btn--ghost" href="{{ request.user.profile.get_absolute_url }}">View profile</a>
+                </div>
+            </form>
+
+            <section class="voice-settings__card" aria-label="Agent status">
+                <header class="voice-settings__card-head">
+                    <h2 class="form-pane__title">Agent status</h2>
+                </header>
+                <div class="voice-settings__card-body">
+                    <div class="voice-settings__agent">
+                        <div>
+                            <div class="voice-settings__agent-name">English</div>
+                            {% with agent=agents.en %}
+                                {% if agent and agent.agent_id %}
+                                    <div class="voice-settings__agent-meta">
+                                        Ready · {{ agent.agent_id }}
+                                        {% if agent.synced_at %}· synced {{ agent.synced_at|date:"M j, Y H:i" }}{% endif %}
+                                    </div>
+                                    {% if agent.last_error %}
+                                        <div class="voice-settings__error">{{ agent.last_error }}</div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="voice-settings__agent-meta">Not created yet. Save with AI calls enabled.</div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                    <div class="voice-settings__agent">
+                        <div>
+                            <div class="voice-settings__agent-name">Spanish</div>
+                            {% with agent=agents.es %}
+                                {% if agent and agent.agent_id %}
+                                    <div class="voice-settings__agent-meta">
+                                        Ready · {{ agent.agent_id }}
+                                        {% if agent.synced_at %}· synced {{ agent.synced_at|date:"M j, Y H:i" }}{% endif %}
+                                    </div>
+                                    {% if agent.last_error %}
+                                        <div class="voice-settings__error">{{ agent.last_error }}</div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="voice-settings__agent-meta">Not created yet. Save with AI calls enabled.</div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="voice-settings__remove">
+                <h2 class="form-pane__title">Remove AI representative</h2>
+                <p class="form__hint">
+                    Delete the remote agents and stop accepting AI calls. You can enable them again later.
+                </p>
+                <form method="post" action="{% url 'voice:delete_agents' %}" class="delete-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn--danger">Delete AI agents</button>
+                </form>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
